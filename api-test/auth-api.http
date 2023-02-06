@@ -1,0 +1,5 @@
+### 密码模式获取JWT令牌
+POST {{auth_host}}/oauth/token?client_id=qbWebApp&client_secret=qbWebApp&grant_type=password&username=zhangsan&password=123
+
+### 校验JWT令牌中的信息
+POST {{auth_host}}/oauth/check_token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsicWlhbi1iaWFuIl0sInVzZXJfbmFtZSI6InpoYW5nc2FuIiwic2NvcGUiOlsiYWxsIl0sImV4cCI6MTY3NTY2NDk0NCwiYXV0aG9yaXRpZXMiOlsicDEiXSwianRpIjoiYjRkNTkxMjMtYjdlMy00YzNkLWFhNmMtNDc5YjZjMzZkYTdjIiwiY2xpZW50X2lkIjoicWJXZWJBcHAifQ.lkRBMgbZe2VuQd3Guuf7oCZVSSnlCa9k7F3UHQU-Dq0

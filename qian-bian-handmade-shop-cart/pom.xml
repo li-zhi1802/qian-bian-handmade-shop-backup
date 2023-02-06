@@ -2,6 +2,7 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>com.lmm</groupId>
         <artifactId>qian-bian-handmade-shop-parent</artifactId>
@@ -9,12 +10,12 @@
         <relativePath>../qian-bian-handmade-shop-parent</relativePath>
     </parent>
 
-    <artifactId>qian-bian-handmade-shop-auth</artifactId>
+    <groupId>com.lmm</groupId>
+    <artifactId>qian-bian-handmade-shop-cart</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>qian-bian-handmade-shop-auth</name>
-    <description>qian-bian-handmade-shop-auth</description>
-
+    <name>qian-bian-handmade-shop-cart</name>
+    <description>qian-bian-handmade-shop-cart</description>
     <dependencies>
         <dependency>
             <groupId>com.lmm</groupId>
@@ -22,8 +23,9 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
