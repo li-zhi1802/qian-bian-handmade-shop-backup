@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lmm.mapper.VoucherMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lmm.entity.Voucher">
+        <id column="id" property="id"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_time" property="updatedTime"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="title" property="title"/>
+        <result column="min_money" property="minMoney"/>
+        <result column="decrease_money" property="decreaseMoney"/>
+        <result column="limit" property="limit"/>
+        <result column="quota" property="quota"/>
+        <result column="stock" property="stock"/>
+        <result column="take_amount" property="takeAmount"/>
+        <result column="used_amount" property="usedAmount"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="valid_use_start_time" property="validUseStartTime"/>
+        <result column="valid_use_end_time" property="validUseEndTime"/>
+        <result column="state" property="state"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, created_time, updated_time, shop_id, title, min_money, decrease_money, limit, quota, stock, take_amount, used_amount, start_time, end_time, valid_use_start_time, valid_use_end_time, state
+    </sql>
+
+</mapper>

@@ -10,10 +10,6 @@ import com.baomidou.mybatisplus.generator.engine.VelocityTemplateEngine;
 import java.util.Collections;
 import java.util.Scanner;
 
-/**
- * @author : 芝麻
- * @date : 2023-02-06 13:28
- **/
 public class MpGenerator {
     public static final String PROJECT_PATH = System.getProperty("user.dir") + "\\qian-bian-handmade-shop-mp-generator";
     public static final String URL_PREFIX = "jdbc:mysql://192.168.159.130:48100/";

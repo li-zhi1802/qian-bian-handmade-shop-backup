@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lmm.mapper.ShippingAddressMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lmm.entity.ShippingAddress">
+        <id column="id" property="id"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="consignor_name" property="consignorName"/>
+        <result column="consignor_phone" property="consignorPhone"/>
+        <result column="province" property="province"/>
+        <result column="county" property="county"/>
+        <result column="city" property="city"/>
+        <result column="street" property="street"/>
+        <result column="priority" property="priority"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, shop_id, consignor_name, consignor_phone, province, county, city, street, priority
+    </sql>
+
+</mapper>

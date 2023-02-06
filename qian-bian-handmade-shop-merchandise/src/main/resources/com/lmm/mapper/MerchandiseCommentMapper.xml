@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lmm.mapper.MerchandiseCommentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lmm.entity.MerchandiseComment">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="publish_time" property="publishTime"/>
+        <result column="content" property="content"/>
+        <result column="merchandise_id" property="merchandiseId"/>
+        <result column="order_id" property="orderId"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="description_score" property="descriptionScore"/>
+        <result column="service_score" property="serviceScore"/>
+        <result column="logistics_score" property="logisticsScore"/>
+        <result column="pic_uris" property="picUris"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, user_id, publish_time, content, merchandise_id, order_id, parent_id, description_score, service_score, logistics_score, pic_uris
+    </sql>
+
+</mapper>

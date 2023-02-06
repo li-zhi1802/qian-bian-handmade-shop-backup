@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lmm.mapper.MerchandiseMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lmm.entity.Merchandise">
+        <id column="id" property="id"/>
+        <result column="shop_id" property="shopId"/>
+        <result column="name" property="name"/>
+        <result column="valid" property="valid"/>
+        <result column="video_uri" property="videoUri"/>
+        <result column="unit_price" property="unitPrice"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="sales" property="sales"/>
+        <result column="stock" property="stock"/>
+        <result column="pic_uris" property="picUris"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, shop_id, name, valid, video_uri, unit_price, category_id, sales, stock, pic_uris
+    </sql>
+
+</mapper>

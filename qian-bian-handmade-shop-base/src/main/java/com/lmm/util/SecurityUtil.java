@@ -5,10 +5,6 @@ import com.lmm.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-/**
- * @author : 芝麻
- * @date : 2023-02-06 12:55
- **/
 @Slf4j
 public class SecurityUtil {
     public static UserDTO getUser() {
