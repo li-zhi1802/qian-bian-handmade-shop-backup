@@ -85,15 +85,14 @@ public class GatewayAuthFilter implements GlobalFilter, Ordered {
      * 获取token
      */
     private String getToken(ServerWebExchange exchange) {
-        String tokenStr = exchange.getRequest().getHeaders().getFirst("Authorization");
+        String tokenStr = exchange.getRequest().getHeaders().getFirst("TOKEN");
         if (StringUtils.isBlank(tokenStr)) {
             return null;
         }
-        String token = tokenStr.split(" ")[1];
-        if (StringUtils.isBlank(token)) {
+        if (StringUtils.isBlank(tokenStr)) {
             return null;
         }
-        return token;
+        return tokenStr;
     }
 
 
