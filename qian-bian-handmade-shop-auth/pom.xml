@@ -21,9 +21,10 @@
             <artifactId>qian-bian-handmade-shop-base</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <!--nacos配置中心依赖-->
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
         <dependency>
             <groupId>com.lmm</groupId>

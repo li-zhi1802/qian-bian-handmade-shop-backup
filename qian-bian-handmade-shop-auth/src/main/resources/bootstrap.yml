@@ -25,3 +25,6 @@ spring:
           - data-id: mp-${spring.profiles.active}.yaml
             group: qian-bian-common
             refresh: true
+  main:
+    allow-bean-definition-overriding: true
+

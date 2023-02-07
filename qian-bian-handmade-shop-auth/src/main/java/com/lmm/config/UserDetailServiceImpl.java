@@ -1,8 +1,8 @@
 package com.lmm.config;
 
 import cn.hutool.json.JSONUtil;
+import com.lmm.client.UserClient;
 import com.lmm.entity.UserInfo;
-import com.lmm.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDetailServiceImpl implements UserDetailsService {
     @Autowired
-    private UserInfoService userInfoService;
+    private UserClient userClient;
 
     @Override
     public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
-        UserInfo userInfo = userInfoService.lambdaQuery().eq(UserInfo::getPhone, phone).one();
+        UserInfo userInfo = userClient.findUserByPhone(phone);
         if (userInfo == null) {
             return null;
         }

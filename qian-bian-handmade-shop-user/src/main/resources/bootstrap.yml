@@ -1,12 +1,12 @@
 server:
-  port: 7009
+  port: 7008
   servlet:
-    context-path: /voucher
+    context-path: /user
 spring:
   profiles:
     active: dev
   application:
-    name: qian-bian-voucher
+    name: qian-bian-user
   cloud:
     nacos:
       server-addr: 192.168.159.130:48108

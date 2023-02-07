@@ -85,10 +85,11 @@ public class GatewayAuthFilter implements GlobalFilter, Ordered {
      * 获取token
      */
     private String getToken(ServerWebExchange exchange) {
-        String tokenStr = exchange.getRequest().getHeaders().getFirst("TOKEN");
+        String tokenStr = exchange.getRequest().getHeaders().getFirst("Authorization");
         if (StringUtils.isBlank(tokenStr)) {
             return null;
         }
+        tokenStr = tokenStr.split(" ")[1];
         if (StringUtils.isBlank(tokenStr)) {
             return null;
         }
@@ -101,12 +102,15 @@ public class GatewayAuthFilter implements GlobalFilter, Ordered {
         String jsonString = JSON.toJSONString(RestResult.fail(error));
         byte[] bits = jsonString.getBytes(StandardCharsets.UTF_8);
         DataBuffer buffer = response.bufferFactory().wrap(bits);
-        response.setStatusCode(HttpStatus.UNAUTHORIZED);
+        response.setStatusCode(HttpStatus.FOUND);
         response.getHeaders().add(
                 "Content-Type",
                 "application/json;charset=UTF-8"
         );
+        response.getHeaders().add(
+                "Location",
+                "http://localhost:8080/log?active=login"
+        );
         return response.writeWith(Mono.just(buffer));
     }
-
 }

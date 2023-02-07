@@ -11,11 +11,11 @@
         <relativePath>../qian-bian-handmade-shop-parent</relativePath>
     </parent>
 
-    <artifactId>qian-bian-handmade-shop-cart</artifactId>
+    <artifactId>qian-bian-handmade-shop-user</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>qian-bian-handmade-shop-cart</name>
-    <description>qian-bian-handmade-shop-cart</description>
+    <name>qian-bian-handmade-shop-user</name>
+    <description>qian-bian-handmade-shop-user</description>
 
     <dependencies>
         <dependency>
