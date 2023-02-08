@@ -16,4 +16,32 @@
         id, name, icon_uri, description, parent_id
     </sql>
 
+    <resultMap id="categoryVOResultMap" type="com.lmm.vo.CategoryVO">
+        <id column="parent_id" property="id"/>
+        <result column="parent_name" property="name"/>
+        <result column="parent_iconUri" property="iconUri"/>
+        <result column="parent_description" property="description"/>
+        <collection property="childCategories" ofType="com.lmm.vo.CategoryVO">
+            <id column="child_id" property="id"/>
+            <result column="child_name" property="name"/>
+            <result column="child_iconUri" property="iconUri"/>
+            <result column="child_description" property="description"/>
+        </collection>
+    </resultMap>
+
+    <select id="queryChildCategory" resultMap="categoryVOResultMap">
+        SELECT p.id          parent_id,
+               p.name        parent_name,
+               p.icon_uri    parent_iconUri,
+               p.description parent_description,
+               c.id          child_id,
+               c.name        child_name,
+               c.icon_uri    child_iconUri,
+               c.description child_description
+        FROM category p
+                 INNER JOIN category c
+        WHERE p.id = #{topParentId}
+          and c.parent_id = p.id
+    </select>
+
 </mapper>

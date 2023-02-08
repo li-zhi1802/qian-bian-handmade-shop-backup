@@ -26,7 +26,7 @@ public class MerchandiseOrder implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("订单id")
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
+    @TableId(value = "id", type = IdType.INPUT)
     private String id;
 
     @ApiModelProperty("用户id")
@@ -43,7 +43,7 @@ public class MerchandiseOrder implements Serializable {
 
     @ApiModelProperty("订单状态（-2订单取消-1待支付，0已付款，1待发货，2待收货，3待评价，4订单完成，5售后中，6退款成功）")
     @TableField("state")
-    private Integer state;
+    private String state;
 
     @ApiModelProperty("收货地址")
     @TableField("delivery_address")
@@ -102,11 +102,11 @@ public class MerchandiseOrder implements Serializable {
         this.merchandises = merchandises;
     }
 
-    public Integer getState() {
+    public String getState() {
         return state;
     }
 
-    public void setState(Integer state) {
+    public void setState(String state) {
         this.state = state;
     }
 

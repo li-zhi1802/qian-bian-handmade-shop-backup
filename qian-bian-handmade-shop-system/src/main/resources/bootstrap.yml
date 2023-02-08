@@ -25,3 +25,6 @@ spring:
           - data-id: mp-${spring.profiles.active}.yaml
             group: qian-bian-common
             refresh: true
+          - data-id: redis-${spring.profiles.active}.yaml
+            group: qian-bian-common
+            refresh: true

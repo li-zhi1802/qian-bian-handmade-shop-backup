@@ -90,7 +90,7 @@ public class Voucher implements Serializable {
 
     @ApiModelProperty("0暂未生效（还不在有效时间）1有效 2强制失效（商家在优惠券有效时间内自己取消）3失效（当前时间已经在有效结束时间之后了）")
     @TableField("state")
-    private Integer state;
+    private String state;
 
 
     public Long getId() {
@@ -221,11 +221,11 @@ public class Voucher implements Serializable {
         this.validUseEndTime = validUseEndTime;
     }
 
-    public Integer getState() {
+    public String getState() {
         return state;
     }
 
-    public void setState(Integer state) {
+    public void setState(String state) {
         this.state = state;
     }
 

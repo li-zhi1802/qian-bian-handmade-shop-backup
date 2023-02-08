@@ -34,6 +34,10 @@ public class UserVoucher implements Serializable {
     @TableField("get_time")
     private LocalDateTime getTime;
 
+    @ApiModelProperty("用户拥有的优惠券状态")
+    @TableField("state")
+    private String state;
+
 
     public Long getUserId() {
         return userId;
@@ -59,12 +63,12 @@ public class UserVoucher implements Serializable {
         this.getTime = getTime;
     }
 
-    @Override
-    public String toString() {
-        return "UserVoucher{" +
-                "userId=" + userId +
-                ", voucherId=" + voucherId +
-                ", getTime=" + getTime +
-                "}";
+    public String getState() {
+        return state;
     }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
 }

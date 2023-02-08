@@ -28,11 +28,11 @@ public class Dictionary implements Serializable {
     private Integer id;
 
     @ApiModelProperty("key")
-    @TableField("key")
+    @TableField("`key`")
     private String key;
 
     @ApiModelProperty("value")
-    @TableField("value")
+    @TableField("`value`")
     private String value;
 
     @ApiModelProperty("字典项描述")

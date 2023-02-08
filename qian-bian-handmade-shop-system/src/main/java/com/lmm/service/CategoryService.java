@@ -2,6 +2,9 @@ package com.lmm.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lmm.entity.Category;
+import com.lmm.vo.CategoryVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.lmm.entity.Category;
  */
 public interface CategoryService extends IService<Category> {
 
+    List<CategoryVO> queryChildCategory(Integer topParentId);
 }

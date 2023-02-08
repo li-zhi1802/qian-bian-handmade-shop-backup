@@ -7,11 +7,12 @@
         <result column="user_id" property="userId"/>
         <result column="voucher_id" property="voucherId"/>
         <result column="get_time" property="getTime"/>
+        <result column="state" property="state"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        user_id, voucher_id, get_time
+        user_id, voucher_id, get_time, state
     </sql>
 
 </mapper>
