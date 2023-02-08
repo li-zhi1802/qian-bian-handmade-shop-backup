@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -19,6 +21,8 @@ import java.time.LocalDateTime;
  * @since 2023-02-06
  */
 @TableName("footmark")
+@NoArgsConstructor
+@AllArgsConstructor
 @ApiModel(value = "Footmark对象", description = "")
 public class Footmark implements Serializable {
 

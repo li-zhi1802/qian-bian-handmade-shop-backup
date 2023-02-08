@@ -2,8 +2,11 @@ package com.lmm.util;
 
 import com.alibaba.fastjson.JSON;
 import com.lmm.dto.UserDTO;
+import com.lmm.exception.QianBianException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import static com.lmm.constant.SystemError.TOKEN_PARSE_ERROR;
 
 @Slf4j
 public class SecurityUtil {
@@ -17,7 +20,7 @@ public class SecurityUtil {
         } catch (Exception e) {
             log.error("token的payload解析失败，json：{}", principalJsonStr);
             e.printStackTrace();
+            throw new QianBianException(TOKEN_PARSE_ERROR);
         }
-        return null;
     }
 }

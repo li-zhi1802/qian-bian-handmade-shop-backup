@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -54,6 +55,10 @@ public class UserInfo implements Serializable {
     @ApiModelProperty("1代表男，0代表女")
     @TableField("sex")
     private Integer sex;
+
+    @ApiModelProperty("生日")
+    @TableField("birthday")
+    private LocalDateTime birthday;
 
     @ApiModelProperty("默认收货地址的编号")
     @TableField("default_address_id")
@@ -144,19 +149,28 @@ public class UserInfo implements Serializable {
         this.name = name;
     }
 
+    public LocalDateTime getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(LocalDateTime birthday) {
+        this.birthday = birthday;
+    }
+
     @Override
     public String toString() {
         return "UserInfo{" +
                 "id=" + id +
-                ", phone=" + phone +
-                ", password=" + password +
-                ", avatarUri=" + avatarUri +
-                ", nickName=" + nickName +
+                ", phone='" + phone + '\'' +
+                ", password='" + password + '\'' +
+                ", avatarUri='" + avatarUri + '\'' +
+                ", nickName='" + nickName + '\'' +
                 ", age=" + age +
-                ", email=" + email +
+                ", email='" + email + '\'' +
                 ", sex=" + sex +
+                ", birthday=" + birthday +
                 ", defaultAddressId=" + defaultAddressId +
-                ", name=" + name +
-                "}";
+                ", name='" + name + '\'' +
+                '}';
     }
 }
