@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * @author 芝麻
  * @since 2023-02-06
  */
-@Api("收货地址的相关接口")
+@Api(tags = "收货地址的相关接口")
 @RestController
 @RequestMapping("/delivery-address")
 public class DeliveryAddressController {

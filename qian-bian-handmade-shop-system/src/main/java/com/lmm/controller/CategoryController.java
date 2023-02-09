@@ -2,6 +2,7 @@ package com.lmm.controller;
 
 import com.lmm.service.CategoryService;
 import com.lmm.vo.CategoryVO;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@ApiOperation("类目的相关接口")
+@Api(tags = "类目的相关接口")
 @RequestMapping("/category")
 public class CategoryController {
     @Autowired

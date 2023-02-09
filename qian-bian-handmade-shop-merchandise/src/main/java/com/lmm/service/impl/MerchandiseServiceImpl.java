@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lmm.entity.Merchandise;
 import com.lmm.mapper.MerchandiseMapper;
 import com.lmm.service.MerchandiseService;
+import com.lmm.vo.MerchandiseVO;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,4 +18,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class MerchandiseServiceImpl extends ServiceImpl<MerchandiseMapper, Merchandise> implements MerchandiseService {
 
+    @Override
+    public MerchandiseVO getDetailMerchandiseById(Long id) {
+        return null;
+    }
 }

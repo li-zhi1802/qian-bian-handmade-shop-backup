@@ -7,10 +7,12 @@ import com.lmm.dto.UserUpdateFormDTO;
 import com.lmm.entity.UserInfo;
 import com.lmm.service.UserInfoService;
 import com.lmm.util.SecurityUtil;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+@Api(tags = "用户信息的相关接口")
 @RestController
 @RequestMapping("/user-info")
 public class UserInfoController {

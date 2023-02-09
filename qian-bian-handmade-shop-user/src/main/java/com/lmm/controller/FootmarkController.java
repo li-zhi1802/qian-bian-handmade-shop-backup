@@ -6,12 +6,14 @@ import com.lmm.entity.Footmark;
 import com.lmm.service.FootmarkService;
 import com.lmm.util.SecurityUtil;
 import com.lmm.vo.FootmarkVO;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
+@Api(tags = "足迹的相关接口")
 @RestController
 @RequestMapping("/footmark")
 public class FootmarkController {

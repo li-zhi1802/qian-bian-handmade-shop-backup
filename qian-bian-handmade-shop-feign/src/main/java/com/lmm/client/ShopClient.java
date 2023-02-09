@@ -1,20 +1,20 @@
 package com.lmm.client;
 
-import com.lmm.entity.UserInfo;
+import com.lmm.entity.Shop;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@FeignClient("qian-bian-user")
-@RequestMapping("/user/feign")
-public interface UserClient {
+@FeignClient("qian-bian-shop")
+@RequestMapping("/shop/feign")
+public interface ShopClient {
     /**
-     * 得到用户信息
+     * 得到店铺信息
      *
-     * @param phone
+     * @param id
      * @return
      */
-    @GetMapping("/detail/{phone}")
-    UserInfo findUserByPhone(@PathVariable("phone") String phone);
+    @GetMapping("/detail/{id}")
+    Shop getShopById(@PathVariable("id") Long id);
 }

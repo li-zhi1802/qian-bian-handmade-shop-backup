@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class MpGenerator {
     public static final String PROJECT_PATH = System.getProperty("user.dir") + "\\qian-bian-handmade-shop-mp-generator";
-    public static final String URL_PREFIX = "jdbc:mysql://192.168.159.130:48100/";
+    public static final String URL_PREFIX = "jdbc:mysql://192.168.159.131:48100/";
     public static final String URL_SUFFIX = "?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai";
     public static final String USER_NAME = "root";
     public static final String PASSWORD = "qianbian";

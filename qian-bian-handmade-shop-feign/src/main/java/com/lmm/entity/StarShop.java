@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -16,6 +19,9 @@ import java.time.LocalDateTime;
  * @author 芝麻
  * @since 2023-02-06
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @TableName("star_shop")
 @ApiModel(value = "StarShop对象", description = "")
 public class StarShop implements Serializable {

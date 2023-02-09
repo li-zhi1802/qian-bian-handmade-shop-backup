@@ -11,17 +11,17 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @ConfigurationProperties(prefix = "minio")
 public class MinioProperties implements InitializingBean {
-    public static String FILE_BUCKET;
+    public static String PICTURE_BUCKET;
     public static String VIDEO_BUCKEt;
     private String endpoint;
     private String accessKey;
     private String secretKey;
-    private String fileBucket;
+    private String pictureBucket;
     private String videoBucket;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        FILE_BUCKET = fileBucket;
+        PICTURE_BUCKET = pictureBucket;
         VIDEO_BUCKEt = videoBucket;
     }
 }

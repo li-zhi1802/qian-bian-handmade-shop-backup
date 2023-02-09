@@ -54,8 +54,8 @@ public class RedisConfig extends CachingConfigurerSupport {
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
                 // 设置缓存的默认过期时间
                 .entryTtl(Duration.ofSeconds(600))
-                //cacheable key双冒号变为单冒号
-                .computePrefixWith(name -> name + ":")
+                //cacheable key写的啥就是啥
+                .computePrefixWith(name -> name)
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(stringSerializer))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer))
                 // 不缓存空值

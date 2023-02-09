@@ -1,7 +1,11 @@
 package com.lmm.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lmm.dto.PageResult;
 import com.lmm.entity.StarShop;
+import com.lmm.vo.StarShopVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +17,9 @@ import com.lmm.entity.StarShop;
  */
 public interface StarShopService extends IService<StarShop> {
 
+    Boolean addOrRemoveShop(Long shopId, Long userId);
+
+    PageResult<StarShopVO> listStarShopByPage(Long pageNum, Long userId);
+
+    Boolean deleteStarShops(List<Long> shopId, Long userId);
 }

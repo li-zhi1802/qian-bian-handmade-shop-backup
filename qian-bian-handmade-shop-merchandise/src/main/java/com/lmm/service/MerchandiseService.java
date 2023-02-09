@@ -2,6 +2,7 @@ package com.lmm.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lmm.entity.Merchandise;
+import com.lmm.vo.MerchandiseVO;
 
 /**
  * <p>
@@ -13,4 +14,5 @@ import com.lmm.entity.Merchandise;
  */
 public interface MerchandiseService extends IService<Merchandise> {
 
+    MerchandiseVO getDetailMerchandiseById(Long id);
 }
