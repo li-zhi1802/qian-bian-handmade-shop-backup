@@ -4,18 +4,14 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-/**
- * <p>
- *
- * </p>
- *
- * @author 芝麻
- * @since 2023-02-06
- */
 @TableName("cart")
+@AllArgsConstructor
+@NoArgsConstructor
 @ApiModel(value = "Cart对象", description = "")
 public class Cart implements Serializable {
 
