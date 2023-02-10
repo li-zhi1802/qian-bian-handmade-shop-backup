@@ -6,18 +6,14 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-/**
- * <p>
- *
- * </p>
- *
- * @author 芝麻
- * @since 2023-02-06
- */
 @TableName("delivery_address")
+@AllArgsConstructor
+@NoArgsConstructor
 @ApiModel(value = "DeliveryAddress对象", description = "")
 public class DeliveryAddress implements Serializable {
 

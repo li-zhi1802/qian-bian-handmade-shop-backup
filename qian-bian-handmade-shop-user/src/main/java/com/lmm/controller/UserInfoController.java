@@ -22,7 +22,7 @@ public class UserInfoController {
     @ApiOperation("注册用户")
     @PostMapping("/register")
     public RestResult register(@RequestBody UserRegisterFormDTO registerFormDTO) {
-        return userInfoService.register(registerFormDTO);
+        return RestResult.success(userInfoService.register(registerFormDTO));
     }
 
     @ApiOperation("更新用户基本信息（除了头像和密码都可以更新）")
@@ -38,12 +38,12 @@ public class UserInfoController {
     @ApiOperation("修改密码")
     @PutMapping("/password")
     public RestResult updatePassword(@RequestBody String password) {
-        return userInfoService.updatePassword(password, SecurityUtil.getUser().getId());
+        return RestResult.success(userInfoService.updatePassword(password, SecurityUtil.getUser().getId()));
     }
 
     @ApiOperation("判断密码是否正确")
     @GetMapping("/isRight")
     public RestResult passwordIsRight(@RequestBody String password) {
-        return userInfoService.passwordIsRight(password, SecurityUtil.getUser().getId());
+        return RestResult.success(userInfoService.passwordIsRight(password, SecurityUtil.getUser().getId()));
     }
 }

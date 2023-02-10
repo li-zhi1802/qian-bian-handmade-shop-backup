@@ -20,6 +20,7 @@ public class MerchandiseServiceImpl extends ServiceImpl<MerchandiseMapper, Merch
 
     @Override
     public MerchandiseVO getDetailMerchandiseById(Long id) {
+        // TODO: 2023/2/10 待实现
         return null;
     }
 }

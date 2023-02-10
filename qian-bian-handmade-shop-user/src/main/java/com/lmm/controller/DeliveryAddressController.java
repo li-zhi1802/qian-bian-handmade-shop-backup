@@ -29,13 +29,13 @@ public class DeliveryAddressController {
     @ApiOperation("得到登录用户的默认收货地址")
     @GetMapping("/default")
     public RestResult getDefaultDeliveryAddress() {
-        return deliveryAddressService.getDefaultDeliveryAddress(SecurityUtil.getUser().getId());
+        return RestResult.success(deliveryAddressService.getDefaultDeliveryAddress(SecurityUtil.getUser().getId()));
     }
 
     @ApiOperation("获取所有的收货地址")
     @GetMapping
     public RestResult listAllDeliveryAddresses() {
-        return deliveryAddressService.listAllDeliveryAddresses(SecurityUtil.getUser().getId());
+        return RestResult.success(deliveryAddressService.listAllDeliveryAddresses(SecurityUtil.getUser().getId()));
     }
 
     @ApiOperation("修改收货地址基本信息")
@@ -51,18 +51,18 @@ public class DeliveryAddressController {
     @ApiOperation("更新默认地址")
     @PutMapping("/default/{deliveryAddressId}/{priority}")
     public RestResult updateDefaultDeliveryAddress(@PathVariable("deliveryAddressId") Integer deliveryAddressId, @PathVariable("priority") Integer priority) {
-        return deliveryAddressService.updateDefaultDeliveryAddress(SecurityUtil.getUser().getId(), deliveryAddressId, priority);
+        return RestResult.success(deliveryAddressService.updateDefaultDeliveryAddress(SecurityUtil.getUser().getId(), deliveryAddressId, priority));
     }
 
     @ApiOperation("增加收货地址")
     @PostMapping
     public RestResult addDeliveryAddress(@RequestBody DeliveryAddressFormDTO deliveryAddressFormDTO) {
-        return deliveryAddressService.saveDeliveryAddress(deliveryAddressFormDTO, SecurityUtil.getUser().getId());
+        return RestResult.success(deliveryAddressService.saveDeliveryAddress(deliveryAddressFormDTO, SecurityUtil.getUser().getId()));
     }
 
     @ApiOperation("删除收货地址，如果是默认地址被删除，则优先级为1的收货地址顶上")
     @DeleteMapping("/{deliveryAddressId}/{priority}")
     public RestResult deleteDeliveryAddress(@PathVariable("deliveryAddressId") Integer deliveryAddressId, @PathVariable("priority") Integer priority) {
-        return deliveryAddressService.deleteDeliveryAddress(deliveryAddressId, priority, SecurityUtil.getUser().getId());
+        return RestResult.success(deliveryAddressService.deleteDeliveryAddress(deliveryAddressId, priority, SecurityUtil.getUser().getId()));
     }
 }

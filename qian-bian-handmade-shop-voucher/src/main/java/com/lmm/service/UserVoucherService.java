@@ -1,7 +1,10 @@
 package com.lmm.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lmm.dto.PageResult;
+import com.lmm.dto.UserVoucherFilter;
 import com.lmm.entity.UserVoucher;
+import com.lmm.vo.UserVoucherVO;
 
 /**
  * <p>
@@ -13,4 +16,7 @@ import com.lmm.entity.UserVoucher;
  */
 public interface UserVoucherService extends IService<UserVoucher> {
 
+    PageResult<UserVoucherVO> listUserVoucherByPage(Long pageNum, UserVoucherFilter userVoucherState, Long userId);
+
+    Boolean deleteUserVoucher(Long voucherId, Long userId);
 }

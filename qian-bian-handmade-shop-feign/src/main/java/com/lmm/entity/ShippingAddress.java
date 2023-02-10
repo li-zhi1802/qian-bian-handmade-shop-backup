@@ -24,12 +24,12 @@ public class ShippingAddress implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("发货地址的id")
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Integer id;
 
     @ApiModelProperty("关联的店铺id")
     @TableField("shop_id")
-    private Integer shopId;
+    private Long shopId;
 
     @ApiModelProperty("发货人姓名")
     @TableField("consignor_name")
@@ -68,11 +68,11 @@ public class ShippingAddress implements Serializable {
         this.id = id;
     }
 
-    public Integer getShopId() {
+    public Long getShopId() {
         return shopId;
     }
 
-    public void setShopId(Integer shopId) {
+    public void setShopId(Long shopId) {
         this.shopId = shopId;
     }
 

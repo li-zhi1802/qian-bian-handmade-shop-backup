@@ -68,6 +68,17 @@ public class UserInfo implements Serializable {
     @TableField("name")
     private String name;
 
+    @ApiModelProperty("拥有的店铺id")
+    @TableField("shop_id")
+    private Long shopId;
+
+    public Long getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(Long shopId) {
+        this.shopId = shopId;
+    }
 
     public Long getId() {
         return id;
@@ -171,6 +182,7 @@ public class UserInfo implements Serializable {
                 ", birthday=" + birthday +
                 ", defaultAddressId=" + defaultAddressId +
                 ", name='" + name + '\'' +
+                ", shopId=" + shopId +
                 '}';
     }
 }

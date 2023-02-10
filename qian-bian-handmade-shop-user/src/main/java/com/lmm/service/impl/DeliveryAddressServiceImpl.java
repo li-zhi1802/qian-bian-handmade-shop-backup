@@ -3,7 +3,6 @@ package com.lmm.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lmm.dto.DeliveryAddressFormDTO;
-import com.lmm.dto.RestResult;
 import com.lmm.entity.DeliveryAddress;
 import com.lmm.entity.UserInfo;
 import com.lmm.exception.QianBianException;
@@ -27,26 +26,24 @@ public class DeliveryAddressServiceImpl extends ServiceImpl<DeliveryAddressMappe
     private DeliveryAddressService proxy;
 
     @Override
-    public RestResult getDefaultDeliveryAddress(Long userId) {
+    public DeliveryAddress getDefaultDeliveryAddress(Long userId) {
         Long defaultAddressId = userInfoService.lambdaQuery().select(UserInfo::getDefaultAddressId).eq(UserInfo::getId, userId).one().getDefaultAddressId();
         if (defaultAddressId == null) {
             throw new QianBianException("暂无默认收货地址!");
         }
-        return RestResult.success(getById(defaultAddressId));
+        return getById(defaultAddressId);
     }
 
     @Override
-    public RestResult listAllDeliveryAddresses(Long userId) {
-        return RestResult.success(
-                lambdaQuery()
-                        .eq(DeliveryAddress::getUserId, userId)
-                        .orderByAsc(DeliveryAddress::getPriority)
-                        .list()
-        );
+    public List<DeliveryAddress> listAllDeliveryAddresses(Long userId) {
+        return lambdaQuery()
+                .eq(DeliveryAddress::getUserId, userId)
+                .orderByAsc(DeliveryAddress::getPriority)
+                .list();
     }
 
     @Override
-    public RestResult saveDeliveryAddress(DeliveryAddressFormDTO deliveryAddressFormDTO, Long userId) {
+    public Boolean saveDeliveryAddress(DeliveryAddressFormDTO deliveryAddressFormDTO, Long userId) {
         DeliveryAddress deliveryAddress = BeanUtil.copyProperties(deliveryAddressFormDTO, DeliveryAddress.class);
         deliveryAddress.setUserId(userId);
         List<DeliveryAddress> ownAddresses = lambdaQuery()
@@ -56,49 +53,58 @@ public class DeliveryAddressServiceImpl extends ServiceImpl<DeliveryAddressMappe
                 .list();
         // 设置优先级
         deliveryAddress.setPriority(ownAddresses.get(ownAddresses.size() - 1).getPriority() + 1);
-        return RestResult.success(
-                save(deliveryAddress)
-        );
+        return save(deliveryAddress);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public RestResult updateDefaultDeliveryAddress(Long userId, Integer deliveryAddressId, Integer priority) {
+    public Boolean updateDefaultDeliveryAddress(Long userId, Integer deliveryAddressId, Integer priority) {
         // 更新priority之前的所有收货地址的优先级为原本的值加1
-        proxy.maintenancePriority(userId, priority);
-        // 更新用户的默认收货地址
-        userInfoService.lambdaUpdate().eq(UserInfo::getDefaultAddressId, deliveryAddressId).update();
-        return RestResult.success(
-                // 更新其为默认地址
-                lambdaUpdate().eq(DeliveryAddress::getId, deliveryAddressId).update()
-        );
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public boolean maintenancePriority(Long userId, Integer priority) {
+        // 更新其他的收货地址的优先级
         List<DeliveryAddress> needUpdate = lambdaQuery()
                 .eq(DeliveryAddress::getUserId, userId)
                 .select(DeliveryAddress::getId, DeliveryAddress::getPriority)
                 .lt(DeliveryAddress::getPriority, priority)
                 .list();
-        // 不需要更新其他的收货地址的优先级
-        if (needUpdate == null || needUpdate.isEmpty()) {
-            return true;
+        if (needUpdate != null && !needUpdate.isEmpty()) {
+            updateBatchById(
+                    needUpdate.stream().map(d -> {
+                        // 更新优先级为原来的优先级减1
+                        d.setPriority(d.getPriority() + 1);
+                        return d;
+                    }).collect(Collectors.toList())
+            );
         }
-        return saveOrUpdateBatch(
-                needUpdate.stream().map(d -> {
-                    // 更新优先级为原来的优先级加1
-                    d.setPriority(d.getPriority() + 1);
-                    return d;
-                }).collect(Collectors.toList())
-        );
+        // 更新用户的默认收货地址
+        userInfoService.lambdaUpdate()
+                .eq(UserInfo::getId, userId)
+                .set(UserInfo::getDefaultAddressId, deliveryAddressId)
+                .update();
+        // 更新其为默认地址
+        return lambdaUpdate()
+                .eq(DeliveryAddress::getId, deliveryAddressId)
+                .set(DeliveryAddress::getPriority, 0)
+                .update();
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public RestResult deleteDeliveryAddress(Integer deliveryAddressId, Integer priority, Long userId) {
-        proxy.maintenancePriority(userId, priority);
+    public Boolean deleteDeliveryAddress(Integer deliveryAddressId, Integer priority, Long userId) {
+        // 更新其他的收货地址的优先级
+        List<DeliveryAddress> needUpdate = lambdaQuery()
+                .eq(DeliveryAddress::getUserId, userId)
+                .select(DeliveryAddress::getId, DeliveryAddress::getPriority)
+                .gt(DeliveryAddress::getPriority, priority)
+                .list();
+        if (needUpdate != null && !needUpdate.isEmpty()) {
+            updateBatchById(
+                    needUpdate.stream().map(d -> {
+                        // 更新优先级为原来的优先级减1
+                        d.setPriority(d.getPriority() - 1);
+                        return d;
+                    }).collect(Collectors.toList())
+            );
+        }
         if (priority == 0) {
             // 删除默认地址，修改用户的默认地址
             DeliveryAddress newDefaultDelivery = lambdaQuery().eq(DeliveryAddress::getUserId, userId).eq(DeliveryAddress::getPriority, 1).one();
@@ -106,9 +112,7 @@ public class DeliveryAddressServiceImpl extends ServiceImpl<DeliveryAddressMappe
             Integer newDefaultDeliveryAddressId = newDefaultDelivery == null ? null : newDefaultDelivery.getId();
             userInfoService.lambdaUpdate().eq(UserInfo::getId, userId).set(UserInfo::getDefaultAddressId, newDefaultDeliveryAddressId);
         }
-        return RestResult.success(
-                // 删除对应的收货地址
-                lambdaUpdate().eq(DeliveryAddress::getId, deliveryAddressId).remove()
-        );
+        // 删除对应的收货地址
+        return lambdaUpdate().eq(DeliveryAddress::getId, deliveryAddressId).remove();
     }
 }

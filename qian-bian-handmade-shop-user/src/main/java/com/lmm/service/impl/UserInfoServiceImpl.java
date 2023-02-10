@@ -2,7 +2,6 @@ package com.lmm.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lmm.dto.RestResult;
 import com.lmm.dto.UserRegisterFormDTO;
 import com.lmm.entity.UserInfo;
 import com.lmm.mapper.UserInfoMapper;
@@ -17,30 +16,24 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public RestResult register(UserRegisterFormDTO registerFormDTO) {
+    public Boolean register(UserRegisterFormDTO registerFormDTO) {
         UserInfo registerUserInfo = BeanUtil.copyProperties(registerFormDTO, UserInfo.class);
         registerUserInfo.setPassword(passwordEncoder.encode(registerUserInfo.getPassword()));
-        return RestResult.success(
-                save(registerUserInfo)
-        );
+        return save(registerUserInfo);
     }
 
     @Override
-    public RestResult updatePassword(String password, Long userId) {
+    public Boolean updatePassword(String password, Long userId) {
         UserInfo userInfo = new UserInfo();
         userInfo.setId(userId);
         userInfo.setPassword(passwordEncoder.encode(password));
-        return RestResult.success(
-                updateById(userInfo)
-        );
+        return updateById(userInfo);
     }
 
     @Override
-    public RestResult passwordIsRight(String password, Long userId) {
+    public Boolean passwordIsRight(String password, Long userId) {
         String rightPassword = lambdaQuery().eq(UserInfo::getId, userId).select(UserInfo::getPassword).one().getPassword();
-        return RestResult.success(
-                // 判断是否正确
-                passwordEncoder.matches(password, rightPassword)
-        );
+        // 判断是否正确
+        return passwordEncoder.matches(password, rightPassword);
     }
 }

@@ -23,5 +23,4 @@ public class FeignController {
     public Shop getShopById(@PathVariable("id") Long id) {
         return shopService.getById(id);
     }
-
 }

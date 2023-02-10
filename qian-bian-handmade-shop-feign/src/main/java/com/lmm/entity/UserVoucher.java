@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -17,6 +19,8 @@ import java.time.LocalDateTime;
  * @since 2023-02-06
  */
 @TableName("user_voucher")
+@AllArgsConstructor
+@NoArgsConstructor
 @ApiModel(value = "UserVoucher对象", description = "")
 public class UserVoucher implements Serializable {
 
@@ -25,6 +29,10 @@ public class UserVoucher implements Serializable {
     @ApiModelProperty("用户id")
     @TableField("user_id")
     private Long userId;
+
+    @ApiModelProperty("店铺id")
+    @TableField("shop_id")
+    private Long shopId;
 
     @ApiModelProperty("优惠券id")
     @TableField("voucher_id")
@@ -38,6 +46,13 @@ public class UserVoucher implements Serializable {
     @TableField("state")
     private String state;
 
+    public Long getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(Long shopId) {
+        this.shopId = shopId;
+    }
 
     public Long getUserId() {
         return userId;
@@ -71,4 +86,14 @@ public class UserVoucher implements Serializable {
         this.state = state;
     }
 
+    @Override
+    public String toString() {
+        return "UserVoucher{" +
+                "userId=" + userId +
+                ", shopId=" + shopId +
+                ", voucherId=" + voucherId +
+                ", getTime=" + getTime +
+                ", state='" + state + '\'' +
+                '}';
+    }
 }

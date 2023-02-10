@@ -1,7 +1,6 @@
 package com.lmm.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.lmm.dto.RestResult;
 import com.lmm.dto.UserRegisterFormDTO;
 import com.lmm.entity.UserInfo;
 
@@ -13,7 +12,7 @@ public interface UserInfoService extends IService<UserInfo> {
      * @param registerFormDTO
      * @return
      */
-    RestResult register(UserRegisterFormDTO registerFormDTO);
+    Boolean register(UserRegisterFormDTO registerFormDTO);
 
     /**
      * 更新密码
@@ -22,7 +21,7 @@ public interface UserInfoService extends IService<UserInfo> {
      * @param userId
      * @return
      */
-    RestResult updatePassword(String password, Long userId);
+    Boolean updatePassword(String password, Long userId);
 
     /**
      * 返回密码是否正确
@@ -31,5 +30,5 @@ public interface UserInfoService extends IService<UserInfo> {
      * @param userId
      * @return
      */
-    RestResult passwordIsRight(String password, Long userId);
+    Boolean passwordIsRight(String password, Long userId);
 }

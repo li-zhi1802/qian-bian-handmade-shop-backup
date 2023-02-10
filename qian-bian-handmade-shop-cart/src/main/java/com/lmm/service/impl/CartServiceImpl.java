@@ -6,6 +6,7 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lmm.client.MerchandiseClient;
 import com.lmm.client.ShopClient;
+import com.lmm.client.VoucherClient;
 import com.lmm.dto.CartDTO;
 import com.lmm.entity.Cart;
 import com.lmm.entity.Merchandise;
@@ -15,6 +16,7 @@ import com.lmm.mapper.CartMapper;
 import com.lmm.service.CartService;
 import com.lmm.vo.CartItem;
 import com.lmm.vo.CartVO;
+import com.lmm.vo.VoucherVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -104,6 +106,9 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
         return lambdaUpdate().eq(Cart::getUserId, userId).eq(Cart::getMerchandiseId, merchandiseId).remove();
     }
 
+    @Autowired
+    private VoucherClient voucherClient;
+
     @Override
     public List<CartVO> getMyCart(Long userId) {
         String cacheKey = CART_KEY + userId;
@@ -120,7 +125,11 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
             Shop shopDetail = shopClient.getShopById(shopId);
             CartVO cartVO = BeanUtil.copyProperties(shopDetail, CartVO.class);
             cartVO.setCartItems(cartItems);
-            cartVO.setVouchers(null);
+            cartVO.setVouchers(
+                    voucherClient.listShopVouchers(shopId, 1L)
+                            .stream().map(v -> BeanUtil.copyProperties(v, VoucherVO.class))
+                            .collect(Collectors.toList())
+            );
             cartVOs.add(cartVO);
         }
         return cartVOs;

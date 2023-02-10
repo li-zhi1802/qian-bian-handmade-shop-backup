@@ -25,7 +25,7 @@ public class Voucher implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("优惠券的id")
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
     @ApiModelProperty("创建时间")
