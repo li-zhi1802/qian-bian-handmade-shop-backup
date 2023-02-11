@@ -46,4 +46,10 @@ public class UserInfoController {
     public RestResult passwordIsRight(@RequestBody String password) {
         return RestResult.success(userInfoService.passwordIsRight(password, SecurityUtil.getUser().getId()));
     }
+
+    @ApiOperation("返回详细的用户信息")
+    @GetMapping
+    public RestResult getDetailUserInfo() {
+        return RestResult.success(userInfoService.getDetailUserInfo(SecurityUtil.getUser().getId()));
+    }
 }

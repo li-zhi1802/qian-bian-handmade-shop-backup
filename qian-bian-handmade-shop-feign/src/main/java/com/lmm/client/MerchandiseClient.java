@@ -17,7 +17,7 @@ public interface MerchandiseClient {
      * @param id
      * @return
      */
-    @GetMapping("/detail/{id}")
+    @GetMapping("/{id}")
     Merchandise getMerchandiseById(@PathVariable("id") Long id);
 
     /**

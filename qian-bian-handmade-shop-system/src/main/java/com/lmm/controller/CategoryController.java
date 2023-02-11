@@ -1,5 +1,6 @@
 package com.lmm.controller;
 
+import com.lmm.entity.Category;
 import com.lmm.service.CategoryService;
 import com.lmm.vo.CategoryVO;
 import io.swagger.annotations.Api;
@@ -25,7 +26,12 @@ public class CategoryController {
 
     @ApiOperation("返回指定父类目的子目录，若不指定，就是返回顶级目录")
     @GetMapping({"/{topParentId}", ""})
-    public List<CategoryVO> dictionary(@PathVariable(value = "topParentId", required = false) Integer topParentId) {
+    public List<CategoryVO> listCategories(@PathVariable(value = "topParentId", required = false) Integer topParentId) {
         return categoryService.queryChildCategory(topParentId == null ? 1 : topParentId);
+    }
+
+    @GetMapping("/{categoryId}")
+    public Category getCategoryById(@PathVariable("categoryId") Integer categoryId) {
+        return categoryService.getById(categoryId);
     }
 }

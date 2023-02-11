@@ -3,6 +3,7 @@ package com.lmm.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lmm.dto.AddShippingAddressDTO;
 import com.lmm.entity.ShippingAddress;
+import com.lmm.vo.ShippingAddressVO;
 
 import java.util.List;
 
@@ -23,4 +24,6 @@ public interface ShippingAddressService extends IService<ShippingAddress> {
     List<ShippingAddress> allShippingAddress(Long shopId, Long userId);
 
     Boolean updateDefaultShippingAddress(Long shopId, Long shippingAddressId, Integer priority, Long userId);
+
+    ShippingAddressVO defaultShippingAddress(Long shopId);
 }

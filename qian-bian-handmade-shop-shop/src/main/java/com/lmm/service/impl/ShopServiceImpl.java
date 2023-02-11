@@ -13,7 +13,6 @@ import com.lmm.exception.QianBianException;
 import com.lmm.mapper.ShopMapper;
 import com.lmm.service.ShippingAddressService;
 import com.lmm.service.ShopService;
-import com.lmm.vo.ShippingAddressVO;
 import com.lmm.vo.ShopVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,13 +38,7 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements Sh
         ShopVO shopVO = BeanUtil.copyProperties(shop, ShopVO.class);
         UserInfo shopKeeper = userClient.findUserById(shop.getShopKeeperId());
         shopVO.setShopKeeper(BeanUtil.copyProperties(shopKeeper, UserDTO.class));
-        if (shop.getDefaultAddressId() != null) {
-            ShippingAddress defaultShippingAddress = shippingAddressService.lambdaQuery()
-                    .eq(ShippingAddress::getId, shop.getDefaultAddressId())
-                    .select(ShippingAddress::getProvince, ShippingAddress::getCounty, ShippingAddress::getCity)
-                    .one();
-            shopVO.setDefaultAddress(BeanUtil.copyProperties(defaultShippingAddress, ShippingAddressVO.class));
-        }
+        shopVO.setDefaultAddress(shippingAddressService.defaultShippingAddress(shopId));
         return shopVO;
     }
 

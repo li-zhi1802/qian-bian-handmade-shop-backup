@@ -26,7 +26,7 @@ public class MerchandiseComment implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("评论的id")
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
     @ApiModelProperty("关联的用户")

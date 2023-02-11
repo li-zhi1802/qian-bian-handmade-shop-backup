@@ -11,6 +11,7 @@ import com.lmm.exception.QianBianException;
 import com.lmm.mapper.ShippingAddressMapper;
 import com.lmm.service.ShippingAddressService;
 import com.lmm.service.ShopService;
+import com.lmm.vo.ShippingAddressVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -104,6 +105,21 @@ public class ShippingAddressServiceImpl extends ServiceImpl<ShippingAddressMappe
                 // 0是默认地址
                 .set(ShippingAddress::getPriority, 0)
                 .update();
+    }
+
+    @Override
+    public ShippingAddressVO defaultShippingAddress(Long shopId) {
+        Shop shop = shopService.lambdaQuery().eq(Shop::getId, shopId).select(Shop::getDefaultAddressId).one();
+        if (shop == null) {
+            throw new QianBianException("店铺不存在");
+        }
+        return BeanUtil.copyProperties(
+                lambdaQuery()
+                        .eq(ShippingAddress::getId, shop.getDefaultAddressId())
+                        .select(ShippingAddress::getProvince, ShippingAddress::getCounty, ShippingAddress::getCity)
+                        .one(),
+                ShippingAddressVO.class
+        );
     }
 
     @Override

@@ -24,8 +24,6 @@ public class ShopVO {
     private BigDecimal logisticsAvgScore;
     @ApiModelProperty("店铺头像")
     private String avatarUri;
-    @ApiModelProperty("默认发货地址")
-    private ShippingAddressVO defaultAddress;
     @ApiModelProperty("店主信息")
     private UserDTO shopKeeper;
 }

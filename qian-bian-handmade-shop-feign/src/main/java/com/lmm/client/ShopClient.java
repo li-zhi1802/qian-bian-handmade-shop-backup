@@ -1,9 +1,11 @@
 package com.lmm.client;
 
+import com.lmm.entity.ShippingAddress;
 import com.lmm.entity.Shop;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @FeignClient("qian-bian-shop")
@@ -15,6 +17,12 @@ public interface ShopClient {
      * @param id
      * @return
      */
-    @GetMapping("/detail/{id}")
+    @GetMapping("/{id}")
     Shop getShopById(@PathVariable("id") Long id);
+
+    @GetMapping("/shipping-address/default/{shopId}")
+    ShippingAddress defaultShippingAddress(@PathVariable("shopId") Long shopId);
+
+    @PutMapping
+    Boolean updateAvgScore(Shop shop);
 }

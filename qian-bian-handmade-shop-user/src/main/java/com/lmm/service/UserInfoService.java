@@ -3,6 +3,7 @@ package com.lmm.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lmm.dto.UserRegisterFormDTO;
 import com.lmm.entity.UserInfo;
+import com.lmm.vo.UserVO;
 
 public interface UserInfoService extends IService<UserInfo> {
 
@@ -31,4 +32,6 @@ public interface UserInfoService extends IService<UserInfo> {
      * @return
      */
     Boolean passwordIsRight(String password, Long userId);
+
+    UserVO getDetailUserInfo(Long userId);
 }

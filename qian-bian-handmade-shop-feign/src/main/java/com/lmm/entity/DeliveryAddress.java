@@ -20,7 +20,7 @@ public class DeliveryAddress implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("收货地址id")
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Integer id;
 
     @ApiModelProperty("用户编号")

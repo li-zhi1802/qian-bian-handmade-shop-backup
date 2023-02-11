@@ -29,7 +29,7 @@ public class FeignController {
      * @param id
      * @return
      */
-    @GetMapping("/detail/{id}")
+    @GetMapping("/{id}")
     @Cacheable(cacheNames = "feign:merchandise:", key = "args[0]")
     public Merchandise getMerchandiseById(@PathVariable("id") Long id) {
         return merchandiseService.getById(id);

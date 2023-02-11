@@ -27,12 +27,12 @@ public class MerchandiseVO {
     private Integer stock;
     @ApiModelProperty("商品图片")
     private List<String> picUris;
+    @ApiModelProperty("发货地址")
+    private ShippingAddressVO defaultShippingAddress;
     @ApiModelProperty("商品归属的商铺信息")
     private ShopVO shop;
     @ApiModelProperty("商品类目的信息")
     private Category category;
     @ApiModelProperty("商品关联的优惠券")
     private List<VoucherVO> vouchers;
-    @ApiModelProperty("商品关联的评论")
-    private List<MerchandiseCommentVO> comments;
 }
