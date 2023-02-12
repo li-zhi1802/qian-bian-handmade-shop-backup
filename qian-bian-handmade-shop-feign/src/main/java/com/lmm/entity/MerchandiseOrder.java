@@ -26,7 +26,7 @@ public class MerchandiseOrder implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("订单id")
-    @TableId(value = "id", type = IdType.INPUT)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private String id;
 
     @ApiModelProperty("用户id")

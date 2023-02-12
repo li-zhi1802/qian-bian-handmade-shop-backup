@@ -88,6 +88,7 @@ public class MerchandiseCommentServiceImpl extends ServiceImpl<MerchandiseCommen
         if (success == null || !success) {
             throw new QianBianException("更新店铺评分失败，评论保存失败");
         }
+
         return save(merchandiseComment);
     }
 
