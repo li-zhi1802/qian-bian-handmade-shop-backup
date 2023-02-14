@@ -21,7 +21,7 @@ public class DeliveryAddress implements Serializable {
 
     @ApiModelProperty("收货地址id")
     @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private Integer id;
+    private Long id;
 
     @ApiModelProperty("用户编号")
     @TableField("user_id")
@@ -55,12 +55,11 @@ public class DeliveryAddress implements Serializable {
     @TableField("priority")
     private Integer priority;
 
-
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

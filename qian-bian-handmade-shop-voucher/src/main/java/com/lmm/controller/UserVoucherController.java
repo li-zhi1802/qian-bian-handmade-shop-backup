@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * @author 芝麻
  * @since 2023-02-06
  */
-@Api("用户拥有的优惠券相关接口")
+@Api(tags = "用户管理自己拥有的优惠券的接口")
 @RestController
 @RequestMapping("/user-voucher")
 public class UserVoucherController {

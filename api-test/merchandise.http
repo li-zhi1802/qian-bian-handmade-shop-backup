@@ -1,0 +1,70 @@
+### 返回指定商品的详细信息
+GET {{gateway_merchandise_host}}/merchandise/1
+Authorization: Bearer {{access_token}}
+
+### 分页返回指定商品的评论
+GET {{gateway_merchandise_host}}/merchandise-comment/1/1
+Authorization: Bearer {{access_token}}
+
+### 用户通过订单评论
+POST {{gateway_merchandise_host}}/merchandise-comment/publish
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "content": "good",
+  "merchandiseId": "1",
+  "orderId": "20230214apqlxs",
+  "descriptionScore": 4.0,
+  "serviceScore": 4.5,
+  "logisticsScore": 4.5
+}
+
+### 用户追评
+POST {{gateway_merchandise_host}}/merchandise-comment/review
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "content": "我要追评",
+  "merchandiseId": 1,
+  "parentId": 1625338288248193026
+}
+
+### 发布商品
+POST {{gateway_merchandise_host}}/shop-keeper
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "shopId": 1,
+  "name": "测试商品1",
+  "unitPrice": 40.4,
+  "categoryId": 5,
+  "stock": 200,
+  "picUris": [
+    "/picture/temp.png"
+  ]
+}
+
+### 修改商品信息
+PUT {{gateway_merchandise_host}}/shop-keeper
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "id": "1625340891577188353",
+  "name": "修改商品信息",
+  "unitPrice": 400.20,
+  "stock": 300
+}
+
+### 下架商品
+PUT {{gateway_merchandise_host}}/shop-keeper/lowerShelf/1
+Authorization: Bearer {{access_token}}
+
+### 得到商品信息
+GET {{gateway_merchandise_host}}/feign/1
+
+### 返回指定商铺的5条商品
+GET {{gateway_merchandise_host}}/feign/randomMerchandise/1

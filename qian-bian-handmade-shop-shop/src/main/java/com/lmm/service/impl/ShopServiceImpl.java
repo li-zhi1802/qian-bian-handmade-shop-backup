@@ -6,7 +6,6 @@ import com.lmm.client.UserClient;
 import com.lmm.dto.AddShopDTO;
 import com.lmm.dto.UpdateShopDTO;
 import com.lmm.dto.UserDTO;
-import com.lmm.entity.ShippingAddress;
 import com.lmm.entity.Shop;
 import com.lmm.entity.UserInfo;
 import com.lmm.exception.QianBianException;
@@ -55,13 +54,6 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements Sh
 
     @Override
     public Boolean updateShopInfo(UpdateShopDTO updateShopDTO, Long userId) {
-        // 如果要更新默认地址，就检查一下地址是否存在
-        if (updateShopDTO.getDefaultAddressId() != null) {
-            ShippingAddress shippingAddress = shippingAddressService.getById(updateShopDTO.getDefaultAddressId());
-            if (shippingAddress == null) {
-                throw new QianBianException("发货地址不存在");
-            }
-        }
         return saveOrUpdate(BeanUtil.copyProperties(updateShopDTO, Shop.class));
     }
 }

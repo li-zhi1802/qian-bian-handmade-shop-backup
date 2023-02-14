@@ -1,0 +1,11 @@
+### 返回指定父类目的子目录，若不指定，就是返回顶级目录
+GET {{gateway_system_host}}/category
+
+### 返回指定父类目的子目录，若不指定，就是返回顶级目录
+GET {{gateway_system_host}}/category/2
+
+### 得到指定分类的信息
+GET {{gateway_system_host}}/category/specify/2
+
+### 返回系统字典表
+GET {{gateway_system_host}}/dictionary

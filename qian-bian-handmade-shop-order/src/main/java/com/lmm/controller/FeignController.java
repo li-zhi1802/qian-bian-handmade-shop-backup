@@ -18,7 +18,7 @@ public class FeignController {
     private MerchandiseOrderService merchandiseOrderService;
 
     @PutMapping("/{orderId}/{nextState}")
-    public Boolean updateOrderState(@PathVariable String nextState, @PathVariable String orderId) {
+    public Boolean updateOrderState(@PathVariable("nextState") String nextState, @PathVariable("orderId") String orderId) {
         return merchandiseOrderService.updateOrderState(orderId, nextState);
     }
 }

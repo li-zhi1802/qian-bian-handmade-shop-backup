@@ -1,12 +1,14 @@
 package com.lmm.client;
 
 import com.lmm.entity.UserInfo;
+import io.swagger.annotations.Api;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+@Api(tags = "用户Feign客户端")
 @FeignClient("qian-bian-user")
 @RequestMapping("/user/feign")
 public interface UserClient {

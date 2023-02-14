@@ -1,0 +1,9 @@
+### 密码模式获取JWT令牌
+POST {{gateway_auth_host}}/oauth/token?client_id=qbWebApp&client_secret=qbWebApp&grant_type=password&username=16606258160&password=Root_1234
+
+### 校验JWT令牌中的信息
+POST {{gateway_auth_host}}/oauth/check_token?token={{access_token}}
+
+### 退出登录
+POST {{gateway_auth_host}}/logout
+Authorization: Bearer {{access_token}}

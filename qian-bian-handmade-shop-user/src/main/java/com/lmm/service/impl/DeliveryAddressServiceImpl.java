@@ -19,11 +19,6 @@ import java.util.stream.Collectors;
 public class DeliveryAddressServiceImpl extends ServiceImpl<DeliveryAddressMapper, DeliveryAddress> implements DeliveryAddressService {
     @Autowired
     private UserInfoServiceImpl userInfoService;
-    /**
-     * 当前类的代理对象
-     */
-    @Autowired
-    private DeliveryAddressService proxy;
 
     @Override
     public DeliveryAddress getDefaultDeliveryAddress(Long userId) {
@@ -52,13 +47,22 @@ public class DeliveryAddressServiceImpl extends ServiceImpl<DeliveryAddressMappe
                 .orderByAsc(DeliveryAddress::getPriority)
                 .list();
         // 设置优先级
-        deliveryAddress.setPriority(ownAddresses.get(ownAddresses.size() - 1).getPriority() + 1);
-        return save(deliveryAddress);
+        deliveryAddress.setPriority(ownAddresses.size());
+        boolean success = save(deliveryAddress);
+        if (success && ownAddresses.isEmpty()) {
+            // 设置默认地址
+            return userInfoService
+                    .lambdaUpdate()
+                    .eq(UserInfo::getId, userId)
+                    .set(UserInfo::getDefaultAddressId, deliveryAddress.getId())
+                    .update();
+        }
+        return success;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean updateDefaultDeliveryAddress(Long userId, Integer deliveryAddressId, Integer priority) {
+    public Boolean updateDefaultDeliveryAddress(Long userId, Long deliveryAddressId, Integer priority) {
         // 更新priority之前的所有收货地址的优先级为原本的值加1
         // 更新其他的收货地址的优先级
         List<DeliveryAddress> needUpdate = lambdaQuery()
@@ -89,7 +93,7 @@ public class DeliveryAddressServiceImpl extends ServiceImpl<DeliveryAddressMappe
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean deleteDeliveryAddress(Integer deliveryAddressId, Integer priority, Long userId) {
+    public Boolean deleteDeliveryAddress(Long deliveryAddressId, Integer priority, Long userId) {
         // 更新其他的收货地址的优先级
         List<DeliveryAddress> needUpdate = lambdaQuery()
                 .eq(DeliveryAddress::getUserId, userId)
@@ -109,7 +113,7 @@ public class DeliveryAddressServiceImpl extends ServiceImpl<DeliveryAddressMappe
             // 删除默认地址，修改用户的默认地址
             DeliveryAddress newDefaultDelivery = lambdaQuery().eq(DeliveryAddress::getUserId, userId).eq(DeliveryAddress::getPriority, 1).one();
             // 新的默认地址id
-            Integer newDefaultDeliveryAddressId = newDefaultDelivery == null ? null : newDefaultDelivery.getId();
+            Long newDefaultDeliveryAddressId = newDefaultDelivery == null ? null : newDefaultDelivery.getId();
             userInfoService.lambdaUpdate().eq(UserInfo::getId, userId).set(UserInfo::getDefaultAddressId, newDefaultDeliveryAddressId);
         }
         // 删除对应的收货地址

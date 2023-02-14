@@ -9,7 +9,7 @@ spring:
     name: qian-bian-auth
   cloud:
     nacos:
-      server-addr: 192.168.159.131:48108
+      server-addr: 192.168.159.132:48108
       discovery:
         namespace: ${spring.profiles.active}
         group: qian-bian-project
@@ -23,6 +23,9 @@ spring:
             group: qian-bian-common
             refresh: true
           - data-id: mp-${spring.profiles.active}.yaml
+            group: qian-bian-common
+            refresh: true
+          - data-id: redis-${spring.profiles.active}.yaml
             group: qian-bian-common
             refresh: true
   main:

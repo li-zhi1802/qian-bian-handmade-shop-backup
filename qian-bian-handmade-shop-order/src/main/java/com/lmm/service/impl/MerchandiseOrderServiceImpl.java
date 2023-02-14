@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lmm.client.MerchandiseClient;
 import com.lmm.client.ShopClient;
+import com.lmm.client.VoucherClient;
 import com.lmm.constant.MerchandiseOrderState;
 import com.lmm.constant.RedisConstant;
 import com.lmm.dto.GenerateOrder;
@@ -52,6 +53,9 @@ public class MerchandiseOrderServiceImpl extends ServiceImpl<MerchandiseOrderMap
     private ShopClient shopClient;
 
     @Autowired
+    private VoucherClient voucherClient;
+
+    @Autowired
     private MerchandiseClient merchandiseClient;
 
     @Override
@@ -60,6 +64,8 @@ public class MerchandiseOrderServiceImpl extends ServiceImpl<MerchandiseOrderMap
         List<MerchandiseOrder> merchandiseOrders = ordersToBeGenerated.stream().map(go -> {
             MerchandiseOrder merchandiseOrder = BeanUtil.copyProperties(go, MerchandiseOrder.class);
             merchandiseOrder.setUserId(userId);
+            // 修改优惠券的使用数目
+            voucherClient.increaseUsedAmount(go.getVoucherId());
             merchandiseOrder.setMerchandises(JSONUtil.toJsonStr(go.getMerchandises()));
             merchandiseOrder.setState(MerchandiseOrderState.TO_BE_PAID.getCode());
             merchandiseOrder.setCreatedTime(LocalDateTime.now());

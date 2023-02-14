@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.lmm.constant.RedisConstant.STAR_MERCHANDISE_KEY;
 import static com.lmm.constant.RedisConstant.STAR_SHOP_KEY;
 import static com.lmm.constant.SystemConstant.PAGE_SIZE;
 
@@ -49,16 +48,17 @@ public class StarShopServiceImpl extends ServiceImpl<StarShopMapper, StarShop> i
 
     @Override
     public Boolean addOrRemoveShop(Long shopId, Long userId) {
-        String cacheKey = STAR_MERCHANDISE_KEY + userId;
+        String cacheKey = STAR_SHOP_KEY + userId;
         // 如果本来就已经收藏了，那就是删除
+        String shopIdStr = shopId.toString();
         if (lambdaQuery().eq(StarShop::getUserId, userId).eq(StarShop::getShopId, shopId).count() > 0) {
             // 从zset中删除此商品id
-            stringRedisTemplate.opsForZSet().remove(cacheKey, shopId);
+            stringRedisTemplate.opsForZSet().remove(cacheKey, shopIdStr);
             return lambdaUpdate().eq(StarShop::getUserId, userId).eq(StarShop::getShopId, shopId).remove();
         } else {
             // key是star:shopId:userId
             // value是SortedSet，shopId,score为当前时间戳
-            stringRedisTemplate.opsForZSet().add(cacheKey, shopId.toString(), LocalDateTime.now().getNano());
+            stringRedisTemplate.opsForZSet().add(cacheKey, shopIdStr, LocalDateTime.now().getNano());
             return save(new StarShop(
                     userId,
                     shopId,
@@ -70,7 +70,7 @@ public class StarShopServiceImpl extends ServiceImpl<StarShopMapper, StarShop> i
     @Override
     public PageResult<StarShopVO> listStarShopByPage(Long pageNum, Long userId) {
         String cacheKey = STAR_SHOP_KEY + userId;
-        long start = (long) PAGE_SIZE * pageNum;
+        long start = (long) PAGE_SIZE * (pageNum - 1);
         Set<ZSetOperations.TypedTuple<String>> tuples = stringRedisTemplate.opsForZSet().reverseRangeWithScores(cacheKey, start, start + PAGE_SIZE);
         // 说明缓存中没有
         if (tuples == null || tuples.isEmpty()) {
@@ -111,7 +111,7 @@ public class StarShopServiceImpl extends ServiceImpl<StarShopMapper, StarShop> i
     public Boolean deleteStarShops(List<Long> shopId, Long userId) {
         String cacheKey = STAR_SHOP_KEY + userId;
         // 删除redis中的数据
-        stringRedisTemplate.opsForZSet().remove(cacheKey, shopId);
+        stringRedisTemplate.opsForZSet().remove(cacheKey, shopId.stream().map(Object::toString).toArray());
         // 删除数据库中的数据
         return lambdaUpdate()
                 .in(StarShop::getShopId, shopId)

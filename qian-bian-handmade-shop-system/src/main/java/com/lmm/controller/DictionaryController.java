@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+@Api(tags = "系统字典表的接口")
 @RestController
-@Api(tags = "系统字典表的相关接口")
 @RequestMapping("/dictionary")
 public class DictionaryController {
     @Autowired

@@ -12,7 +12,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags = "用户信息的相关接口")
+import javax.validation.Valid;
+
+@Api(tags = "管理个人信息的接口")
 @RestController
 @RequestMapping("/user-info")
 public class UserInfoController {
@@ -21,11 +23,11 @@ public class UserInfoController {
 
     @ApiOperation("注册用户")
     @PostMapping("/register")
-    public RestResult register(@RequestBody UserRegisterFormDTO registerFormDTO) {
+    public RestResult register(@RequestBody @Valid UserRegisterFormDTO registerFormDTO) {
         return RestResult.success(userInfoService.register(registerFormDTO));
     }
 
-    @ApiOperation("更新用户基本信息（除了头像和密码都可以更新）")
+    @ApiOperation("更新用户基本信息（除了密码都可以更新）")
     @PutMapping("/basic")
     public RestResult updateUserInfo(@RequestBody UserUpdateFormDTO userUpdateFormDTO) {
         UserInfo userInfo = BeanUtil.copyProperties(userUpdateFormDTO, UserInfo.class);

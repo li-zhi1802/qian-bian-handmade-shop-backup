@@ -43,7 +43,7 @@ public class TokenConfig {
         tokenEnhancerChain.setTokenEnhancers(List.of(accessTokenConverter()));
         service.setTokenEnhancer(tokenEnhancerChain);
         // 令牌默认有效期2小时
-        service.setAccessTokenValiditySeconds(7200);
+        service.setAccessTokenValiditySeconds(7200 * 24 * 24);
         // 刷新令牌默认有效期3天
         service.setRefreshTokenValiditySeconds(259200);
         return service;

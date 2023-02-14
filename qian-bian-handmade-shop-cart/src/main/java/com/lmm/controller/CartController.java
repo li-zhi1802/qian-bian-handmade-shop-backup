@@ -1,5 +1,6 @@
 package com.lmm.controller;
 
+import com.lmm.dto.DeleteCartItemDTO;
 import com.lmm.dto.RestResult;
 import com.lmm.service.CartService;
 import com.lmm.util.SecurityUtil;
@@ -7,6 +8,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -18,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Api(tags = "购物车的相关接口")
 @RestController
-@RequestMapping
+@RequestMapping("/cart")
 public class CartController {
     @Autowired
     private CartService cartService;
@@ -36,13 +39,15 @@ public class CartController {
     }
 
     @ApiOperation("批量删除购物车中的商品")
-    @DeleteMapping("/{shopId}")
-    public RestResult removeMerchandisesFromCart(@PathVariable("shopId") Long shopId, @RequestBody Long[] merchandiseIds) {
+    @DeleteMapping
+    public RestResult removeMerchandisesFromCart(@RequestBody List<DeleteCartItemDTO> deleteCartItemDTOs) {
         Long userId = SecurityUtil.getUser().getId();
         boolean success = true;
-        for (Long merchandiseId : merchandiseIds) {
-            // 将每次的结果都和success做与运算，所有的删除操作都是true，success才是true
-            success &= cartService.removeMerchandiseFromCart(shopId, merchandiseId, userId);
+        for (DeleteCartItemDTO deleteCartItemDTO : deleteCartItemDTOs) {
+            for (Long merchandiseId : deleteCartItemDTO.getMerchandiseIds()) {
+                // 将每次的结果都和success做与运算，所有的删除操作都是true，success才是true
+                success &= cartService.removeMerchandiseFromCart(deleteCartItemDTO.getShopId(), merchandiseId, userId);
+            }
         }
         return RestResult.success(success);
     }

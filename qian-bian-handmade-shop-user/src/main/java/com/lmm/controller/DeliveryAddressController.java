@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * @author 芝麻
  * @since 2023-02-06
  */
-@Api(tags = "收货地址的相关接口")
+@Api(tags = "管理收货地址的接口")
 @RestController
 @RequestMapping("/delivery-address")
 public class DeliveryAddressController {
@@ -39,18 +39,20 @@ public class DeliveryAddressController {
     }
 
     @ApiOperation("修改收货地址基本信息")
-    @PutMapping
-    public RestResult updateDeliveryAddress(@RequestBody DeliveryAddressFormDTO deliveryAddressFormDTO) {
+    @PutMapping("/{deliveryAddressId}")
+    public RestResult updateDeliveryAddress(@RequestBody DeliveryAddressFormDTO deliveryAddressFormDTO, @PathVariable("deliveryAddressId") Long deliveryAddressId) {
+        DeliveryAddress deliveryAddress = BeanUtil.copyProperties(deliveryAddressFormDTO, DeliveryAddress.class);
+        deliveryAddress.setId(deliveryAddressId);
         return RestResult.success(
                 deliveryAddressService.saveOrUpdate(
-                        BeanUtil.copyProperties(deliveryAddressFormDTO, DeliveryAddress.class)
+                        deliveryAddress
                 )
         );
     }
 
     @ApiOperation("更新默认地址")
     @PutMapping("/default/{deliveryAddressId}/{priority}")
-    public RestResult updateDefaultDeliveryAddress(@PathVariable("deliveryAddressId") Integer deliveryAddressId, @PathVariable("priority") Integer priority) {
+    public RestResult updateDefaultDeliveryAddress(@PathVariable("deliveryAddressId") Long deliveryAddressId, @PathVariable("priority") Integer priority) {
         return RestResult.success(deliveryAddressService.updateDefaultDeliveryAddress(SecurityUtil.getUser().getId(), deliveryAddressId, priority));
     }
 
@@ -62,7 +64,7 @@ public class DeliveryAddressController {
 
     @ApiOperation("删除收货地址，如果是默认地址被删除，则优先级为1的收货地址顶上")
     @DeleteMapping("/{deliveryAddressId}/{priority}")
-    public RestResult deleteDeliveryAddress(@PathVariable("deliveryAddressId") Integer deliveryAddressId, @PathVariable("priority") Integer priority) {
+    public RestResult deleteDeliveryAddress(@PathVariable("deliveryAddressId") Long deliveryAddressId, @PathVariable("priority") Integer priority) {
         return RestResult.success(deliveryAddressService.deleteDeliveryAddress(deliveryAddressId, priority, SecurityUtil.getUser().getId()));
     }
 }

@@ -5,18 +5,18 @@ import com.lmm.entity.ShippingAddress;
 import com.lmm.entity.Shop;
 import com.lmm.service.ShippingAddressService;
 import com.lmm.service.ShopService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author : 芝麻
  * @date : 2023-02-09 16:11
  **/
-@RestController("/feign")
+@Api(tags = "用来远程调用的接口")
+@RestController
+@RequestMapping("/feign")
 public class FeignController {
     @Autowired
     private ShippingAddressService shippingAddressService;
@@ -35,7 +35,7 @@ public class FeignController {
     }
 
     @PutMapping
-    public Boolean updateAvgScore(Shop shop) {
+    public Boolean updateAvgScore(@RequestBody Shop shop) {
         return shopService.updateById(shop);
     }
 }

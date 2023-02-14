@@ -20,6 +20,7 @@ import com.lmm.vo.ShippingAddressVO;
 import com.lmm.vo.ShopVO;
 import com.lmm.vo.VoucherVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
@@ -44,6 +45,7 @@ public class MerchandiseServiceImpl extends ServiceImpl<MerchandiseMapper, Merch
     private UserClient userClient;
 
     @Override
+    @Cacheable(cacheNames = "merchandise:detail:", key = "args[0]")
     public MerchandiseVO getDetailMerchandiseById(Long id) {
         Merchandise merchandise = getById(id);
         MerchandiseVO merchandiseVO = BeanUtil.copyProperties(merchandise, MerchandiseVO.class);
@@ -71,7 +73,12 @@ public class MerchandiseServiceImpl extends ServiceImpl<MerchandiseMapper, Merch
         if (!userClient.findUserById(userId).getShopId().equals(shopId)) {
             throw new QianBianException("您不是店主，请不要操作此店铺的相关信息");
         }
-        return save(BeanUtil.copyProperties(publishMerchandiseDTO, Merchandise.class));
+        if (publishMerchandiseDTO.getPicUris() == null || publishMerchandiseDTO.getPicUris().isEmpty()) {
+            throw new QianBianException("请至少上传一张商品照片");
+        }
+        Merchandise merchandise = BeanUtil.copyProperties(publishMerchandiseDTO, Merchandise.class);
+        merchandise.setPicUris(JSONUtil.toJsonStr(publishMerchandiseDTO.getPicUris()));
+        return save(merchandise);
     }
 
     @Override

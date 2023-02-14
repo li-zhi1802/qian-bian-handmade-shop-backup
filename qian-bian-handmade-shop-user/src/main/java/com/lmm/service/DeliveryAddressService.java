@@ -41,7 +41,7 @@ public interface DeliveryAddressService extends IService<DeliveryAddress> {
      * @param priority
      * @return
      */
-    Boolean updateDefaultDeliveryAddress(Long userId, Integer deliveryAddressId, Integer priority);
+    Boolean updateDefaultDeliveryAddress(Long userId, Long deliveryAddressId, Integer priority);
 
     /**
      * 删除收货地址
@@ -51,5 +51,5 @@ public interface DeliveryAddressService extends IService<DeliveryAddress> {
      * @param userId
      * @return
      */
-    Boolean deleteDeliveryAddress(Integer deliveryAddressId, Integer priority, Long userId);
+    Boolean deleteDeliveryAddress(Long deliveryAddressId, Integer priority, Long userId);
 }

@@ -5,6 +5,7 @@ import com.lmm.dto.RestResult;
 import com.lmm.dto.UpdateMerchandiseDTO;
 import com.lmm.service.MerchandiseService;
 import com.lmm.util.SecurityUtil;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
  * @author : 芝麻
  * @date : 2023-02-11 09:20
  **/
+@Api(tags = "商家管理商品的接口")
 @RestController
 @RequestMapping("/shop-keeper")
 public class ShopKeeperController {

@@ -53,7 +53,7 @@ public class Voucher implements Serializable {
     private Integer decreaseMoney;
 
     @ApiModelProperty("每个人限领几张")
-    @TableField("limit")
+    @TableField("`limit`")
     private Integer limit;
 
     @ApiModelProperty("配额")

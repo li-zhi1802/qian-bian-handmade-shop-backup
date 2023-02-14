@@ -1,0 +1,35 @@
+### 将商品添加至收藏列表或者在收藏列表中删除此商品
+PUT {{gateway_star_host}}/star-merchandise/1
+Authorization: Bearer {{access_token}}
+
+### 分页得到登录用户所有的收藏的商品
+GET {{gateway_star_host}}/star-merchandise/1
+Authorization: Bearer {{access_token}}
+
+### 删除指定收藏商品
+DELETE {{gateway_star_host}}/star-merchandise
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+[
+  1,
+  2
+]
+
+### 将商品添加至收藏列表或者在收藏列表中删除此商品
+PUT {{gateway_star_host}}/star-shop/1
+Authorization: Bearer {{access_token}}
+
+### 分页得到登录用户所有的收藏的商品
+GET {{gateway_star_host}}/star-shop/1
+Authorization: Bearer {{access_token}}
+
+### 批量删除指定收藏商品
+DELETE {{gateway_star_host}}/star-shop
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+[
+  1,
+  2
+]

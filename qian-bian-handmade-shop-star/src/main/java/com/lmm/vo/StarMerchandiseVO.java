@@ -26,5 +26,5 @@ public class StarMerchandiseVO {
     @ApiModelProperty("商品单价")
     private BigDecimal unitPrice;
     @ApiModelProperty("商品照片")
-    private String picUri;
+    private String picUris;
 }

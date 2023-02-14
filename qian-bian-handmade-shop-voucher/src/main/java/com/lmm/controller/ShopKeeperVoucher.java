@@ -10,7 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags = "只有商家才可以使用的优惠券接口")
+@Api(tags = "商家管理优惠券的接口")
 @RestController
 @RequestMapping("/shop-keeper")
 public class ShopKeeperVoucher {

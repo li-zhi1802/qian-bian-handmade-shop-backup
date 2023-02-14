@@ -6,10 +6,12 @@ import com.lmm.dto.UpdateShopDTO;
 import com.lmm.service.ShippingAddressService;
 import com.lmm.service.ShopService;
 import com.lmm.util.SecurityUtil;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+@Api(tags = "商家专用接口")
 @RequestMapping("/shop-keeper")
 @RestController
 public class ShopKeeperController {
@@ -43,7 +45,7 @@ public class ShopKeeperController {
     }
 
     @ApiOperation("修改默认发货地址")
-    @GetMapping("/shipping-address/default/{shopId}/{shippingAddressId}/{priority}")
+    @PutMapping("/shipping-address/default/{shopId}/{shippingAddressId}/{priority}")
     public RestResult updateDefaultShippingAddress(@PathVariable("shopId") Long shopId,
                                                    @PathVariable("shippingAddressId") Long shippingAddressId,
                                                    @PathVariable("priority") Integer priority) {

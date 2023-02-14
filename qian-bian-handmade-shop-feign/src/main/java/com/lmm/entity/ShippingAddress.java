@@ -25,7 +25,7 @@ public class ShippingAddress implements Serializable {
 
     @ApiModelProperty("发货地址的id")
     @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private Integer id;
+    private Long id;
 
     @ApiModelProperty("关联的店铺id")
     @TableField("shop_id")
@@ -59,12 +59,11 @@ public class ShippingAddress implements Serializable {
     @TableField("priority")
     private Integer priority;
 
-
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

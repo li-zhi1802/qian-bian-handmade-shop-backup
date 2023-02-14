@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
-@Api(tags = "足迹的相关接口")
+@Api(tags = "管理足迹的接口")
 @RestController
 @RequestMapping("/footmark")
 public class FootmarkController {
@@ -39,7 +39,7 @@ public class FootmarkController {
 
     @ApiOperation("更新或增加足迹")
     @PutMapping("/{merchandiseId}")
-    public RestResult updateOrSaveFootmark(@PathVariable Long merchandiseId) {
+    public RestResult updateOrSaveFootmark(@PathVariable("merchandiseId") Long merchandiseId) {
         return RestResult.success(
                 footmarkService.saveOrUpdate(
                         new Footmark(

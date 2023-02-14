@@ -114,6 +114,12 @@ public class VoucherServiceImpl extends ServiceImpl<VoucherMapper, Voucher> impl
         if (voucher.getStock() <= 0) {
             throw new QianBianException("没有库存了");
         }
+        String voucherState = voucher.getState();
+        if (VoucherState.NOT_YET_ISSUED.getCode().equals(voucherState) ||
+                VoucherState.EXPIRED.getCode().equals(voucherState) ||
+                VoucherState.HAS_TAKEN_OFF.getCode().equals(voucherState)) {
+            throw new QianBianException("此券已不能领取");
+        }
         int count = userVoucherService.lambdaQuery().eq(UserVoucher::getVoucherId, voucherId).eq(UserVoucher::getUserId, userId).count();
         if (count >= voucher.getLimit()) {
             throw new QianBianException("每人只能领取" + voucher.getLimit() + "张优惠券");

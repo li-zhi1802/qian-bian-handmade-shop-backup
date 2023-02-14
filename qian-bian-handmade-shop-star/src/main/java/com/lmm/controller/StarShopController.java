@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
 @Api(tags = "收藏商铺的相关接口")
+@RestController
 @RequestMapping("/star-shop")
 public class StarShopController {
     @Autowired

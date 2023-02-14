@@ -51,15 +51,16 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
         String cacheKey = CART_KEY + userId;
         // 先看看之前购物车有没有这家店的商品
         // 之前就没有这家店
-        if (BooleanUtil.isFalse(stringRedisTemplate.opsForHash().hasKey(cacheKey, shopId))) {
+        String shopIdStr = shopId.toString();
+        if (BooleanUtil.isFalse(stringRedisTemplate.opsForHash().hasKey(cacheKey, shopIdStr))) {
             List<CartDTO> cartDTOs = List.of(new CartDTO(merchandiseId, 1));
             // 放入缓存
-            stringRedisTemplate.opsForHash().put(cacheKey, shopId, JSONUtil.toJsonStr(cartDTOs));
+            stringRedisTemplate.opsForHash().put(cacheKey, shopIdStr, JSONUtil.toJsonStr(cartDTOs));
             // 落库
             return save(new Cart(userId, merchandiseId, 1));
         }
         // 购物车里面本来就有这个商铺
-        List<CartDTO> whole = JSONUtil.toList((String) stringRedisTemplate.opsForHash().get(cacheKey, shopId), CartDTO.class);
+        List<CartDTO> whole = JSONUtil.toList((String) stringRedisTemplate.opsForHash().get(cacheKey, shopIdStr), CartDTO.class);
         List<CartDTO> collect = whole.stream()
                 .filter(c -> merchandiseId.equals(c.getMerchandiseId()))
                 .collect(Collectors.toList());
@@ -67,7 +68,7 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
             // 说明原来没有这个商品，要新加入一个
             whole.add(new CartDTO(merchandiseId, 1));
             // 写回缓存
-            stringRedisTemplate.opsForHash().put(cacheKey, shopId, JSONUtil.toJsonStr(whole));
+            stringRedisTemplate.opsForHash().put(cacheKey, shopIdStr, JSONUtil.toJsonStr(whole));
             // 落库
             return save(new Cart(userId, merchandiseId, 1));
         }
@@ -75,7 +76,7 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
         CartDTO updateCart = collect.get(0);
         updateCart.setQuantity(1 + updateCart.getQuantity());
         // 写回缓存
-        stringRedisTemplate.opsForHash().put(cacheKey, shopId, JSONUtil.toJsonStr(whole));
+        stringRedisTemplate.opsForHash().put(cacheKey, shopIdStr, JSONUtil.toJsonStr(whole));
         // 更新数据库
         return lambdaUpdate().eq(Cart::getUserId, userId).eq(Cart::getMerchandiseId, merchandiseId).set(Cart::getQuantity, updateCart.getQuantity()).update();
     }
@@ -84,24 +85,25 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
     public Boolean removeMerchandiseFromCart(Long shopId, Long merchandiseId, Long userId) {
         // 购物车结构是按商家分类，然后商品具体信息用json序列化保存
         String cacheKey = CART_KEY + userId;
+        String shopIdStr = shopId.toString();
         // 先看看之前购物车有没有这家店的商品
         // 之前就没有这家店
-        if (BooleanUtil.isFalse(stringRedisTemplate.opsForHash().hasKey(cacheKey, shopId))) {
+        if (BooleanUtil.isFalse(stringRedisTemplate.opsForHash().hasKey(cacheKey, shopIdStr))) {
             throw new QianBianException("缓存出错，请重新");
         }
         // 购物车的同一家店铺的所有商品
-        List<CartDTO> cartDTOs = JSONUtil.toList((String) stringRedisTemplate.opsForHash().get(cacheKey, shopId), CartDTO.class);
+        List<CartDTO> cartDTOs = JSONUtil.toList((String) stringRedisTemplate.opsForHash().get(cacheKey, shopIdStr), CartDTO.class);
         // 删除后
         List<CartDTO> leftCartDTOs = cartDTOs.stream().filter(c -> !c.getMerchandiseId().equals(merchandiseId)).collect(Collectors.toList());
         if (leftCartDTOs.isEmpty()) {
             // 说明购物车中原本这家店也就一个商品
             // 把这一项删除
-            stringRedisTemplate.opsForHash().delete(cacheKey, shopId);
+            stringRedisTemplate.opsForHash().delete(cacheKey, shopIdStr);
             // 落库
             return lambdaUpdate().eq(Cart::getUserId, userId).eq(Cart::getMerchandiseId, merchandiseId).remove();
         }
         // 购物车中同店铺有多件商品，更新即可
-        stringRedisTemplate.opsForHash().put(cacheKey, shopId, JSONUtil.toJsonStr(leftCartDTOs));
+        stringRedisTemplate.opsForHash().put(cacheKey, shopIdStr, JSONUtil.toJsonStr(leftCartDTOs));
         // 落库
         return lambdaUpdate().eq(Cart::getUserId, userId).eq(Cart::getMerchandiseId, merchandiseId).remove();
     }
@@ -138,7 +140,8 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
     @Override
     public Boolean updateMerchandiseQuantity(Long shopId, Long merchandiseId, Integer quantity, Long userId) {
         String cacheKey = CART_KEY + userId;
-        List<CartDTO> cartDTOs = JSONUtil.toList((String) stringRedisTemplate.opsForHash().get(cacheKey, shopId), CartDTO.class);
+        String shopIdStr = shopId.toString();
+        List<CartDTO> cartDTOs = JSONUtil.toList((String) stringRedisTemplate.opsForHash().get(cacheKey, shopIdStr), CartDTO.class);
         for (CartDTO ct : cartDTOs) {
             if (ct.getMerchandiseId().equals(merchandiseId)) {
                 ct.setQuantity(quantity);
@@ -146,8 +149,8 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
             }
         }
         // 更新缓存
-        stringRedisTemplate.opsForHash().put(cacheKey, shopId, JSONUtil.toJsonStr(cartDTOs));
+        stringRedisTemplate.opsForHash().put(cacheKey, shopIdStr, JSONUtil.toJsonStr(cartDTOs));
         // 落库
-        return lambdaUpdate().eq(Cart::getUserId, userId).eq(Cart::getMerchandiseId, merchandiseId).eq(Cart::getQuantity, quantity).update();
+        return lambdaUpdate().eq(Cart::getUserId, userId).eq(Cart::getMerchandiseId, merchandiseId).set(Cart::getQuantity, quantity).update();
     }
 }

@@ -1,0 +1,35 @@
+### 查看登录用户的购物车
+GET {{gateway_cart_host}}/cart/
+Authorization: Bearer {{access_token}}
+
+### 添加商品到购物车
+PUT {{gateway_cart_host}}/cart/2/2
+Authorization: Bearer {{access_token}}
+
+### 删除购物车中的一个商品
+DELETE {{gateway_cart_host}}/cart/1/1
+Authorization: Bearer {{access_token}}
+
+### 批量删除购物车中的商品
+DELETE {{gateway_cart_host}}/cart
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+[
+  {
+    "shopId": 1,
+    "merchandiseIds": [
+      1
+    ]
+  },
+  {
+    "shopId": 2,
+    "merchandiseIds": [
+      2
+    ]
+  }
+]
+
+### 修改购物车商品数量
+PUT {{gateway_cart_host}}/cart/1/1/20
+Authorization: Bearer {{access_token}}

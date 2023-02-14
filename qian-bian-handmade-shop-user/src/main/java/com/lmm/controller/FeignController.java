@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
  * @author : 芝麻
  * @date : 2023-02-07 14:25
  **/
-@Api(tags = "此服务暴露给其他微服务专用的Feign的API")
+@Api(tags = "远程调用的接口")
 @RestController
 @RequestMapping("/feign")
 public class FeignController {

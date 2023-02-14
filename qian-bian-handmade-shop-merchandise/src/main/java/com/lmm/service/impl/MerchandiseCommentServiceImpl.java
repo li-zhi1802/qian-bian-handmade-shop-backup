@@ -5,8 +5,10 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lmm.client.OrderClient;
 import com.lmm.client.ShopClient;
 import com.lmm.client.UserClient;
+import com.lmm.constant.MerchandiseOrderState;
 import com.lmm.dto.PublishMerchandiseCommentDTO;
 import com.lmm.dto.ReviewMerchandiseCommentDTO;
 import com.lmm.dto.UserDTO;
@@ -45,6 +47,8 @@ public class MerchandiseCommentServiceImpl extends ServiceImpl<MerchandiseCommen
     private ShopClient shopClient;
     @Autowired
     private MerchandiseService merchandiseService;
+    @Autowired
+    private OrderClient orderClient;
 
     @Override
     public List<MerchandiseCommentVO> listCommentsByMerchandiseId(Long merchandiseId, Long pageNum) {
@@ -81,15 +85,19 @@ public class MerchandiseCommentServiceImpl extends ServiceImpl<MerchandiseCommen
         BigDecimal nextLogisticsScoreSum = shop.getLogisticsScoreSum().add(merchandiseComment.getLogisticsScore());
         shop.setCommentSum(shop.getCommentSum() + 1);
         BigDecimal size = new BigDecimal(shop.getCommentSum());
+        shop.setServiceScoreSum(nextServiceScoreSum);
         shop.setServiceAvgScore(nextServiceScoreSum.divide(size, 2, RoundingMode.FLOOR));
+        shop.setDescriptionScoreSum(nextDescriptionScoreSum);
         shop.setDescriptionAvgScore(nextDescriptionScoreSum.divide(size, 2, RoundingMode.FLOOR));
+        shop.setLogisticsScoreSum(nextLogisticsScoreSum);
         shop.setLogisticsAvgScore(nextLogisticsScoreSum.divide(size, 2, RoundingMode.FLOOR));
         Boolean success = shopClient.updateAvgScore(shop);
         if (success == null || !success) {
             throw new QianBianException("更新店铺评分失败，评论保存失败");
         }
-
-        return save(merchandiseComment);
+        return orderClient.updateOrderState(
+                MerchandiseOrderState.ORDER_COMPLETION.getCode(),
+                publishMerchandiseCommentDTO.getOrderId()) && save(merchandiseComment);
     }
 
     @Override
@@ -97,7 +105,10 @@ public class MerchandiseCommentServiceImpl extends ServiceImpl<MerchandiseCommen
         if (reviewMerchandiseCommentDTO.getParentId() == null) {
             throw new QianBianException("追评请提供父评论id");
         }
-        return save(BeanUtil.copyProperties(reviewMerchandiseCommentDTO, MerchandiseComment.class));
+        MerchandiseComment reviewComment = BeanUtil.copyProperties(reviewMerchandiseCommentDTO, MerchandiseComment.class);
+        reviewComment.setUserId(userId);
+        reviewComment.setPublishTime(LocalDateTime.now());
+        return save(reviewComment);
     }
 
     private void assembleComments(List<MerchandiseCommentVO> merchandiseCommentVOs) {

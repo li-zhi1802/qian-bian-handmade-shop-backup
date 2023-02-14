@@ -41,6 +41,7 @@ public class FootmarkServiceImpl extends ServiceImpl<FootmarkMapper, Footmark> i
                     // 复制
                     FootmarkVO footmarkVO = BeanUtil.copyProperties(merchandise, FootmarkVO.class);
                     // 修改图像的uri为集合的第一个照片
+                    // 这地方不需要判断，因为商品发布的时候必须上传至少一张照片
                     footmarkVO.setPicUri(JSONUtil.toList(merchandise.getPicUris(), String.class).get(0));
                     return footmarkVO;
                 }).collect(Collectors.toList()),

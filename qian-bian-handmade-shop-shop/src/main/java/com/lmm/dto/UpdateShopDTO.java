@@ -11,5 +11,4 @@ public class UpdateShopDTO {
     private Long id;
     private String name;
     private String avatarUri;
-    private Long defaultAddressId;
 }

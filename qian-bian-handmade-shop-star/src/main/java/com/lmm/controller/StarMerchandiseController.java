@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
 @Api(tags = "收藏商品的相关接口")
+@RestController
 @RequestMapping("/star-merchandise")
 public class StarMerchandiseController {
     @Autowired
@@ -31,7 +31,7 @@ public class StarMerchandiseController {
         return starMerchandiseService.listStarMerchandiseByPage(pageNum, SecurityUtil.getUser().getId());
     }
 
-    @ApiOperation("删除指定收藏商品")
+    @ApiOperation("批量删除指定收藏商品")
     @DeleteMapping
     public RestResult deleteStarMerchandises(@RequestBody List<Long> merchandiseId) {
         return RestResult.success(starMerchandiseService.deleteStarMerchandises(merchandiseId, SecurityUtil.getUser().getId()));

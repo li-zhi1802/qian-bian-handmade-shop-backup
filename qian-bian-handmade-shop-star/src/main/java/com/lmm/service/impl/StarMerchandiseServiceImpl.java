@@ -44,15 +44,16 @@ public class StarMerchandiseServiceImpl extends ServiceImpl<StarMerchandiseMappe
     @Override
     public Boolean addOrRemoveMerchandise(Long merchandiseId, Long userId) {
         String cacheKey = STAR_MERCHANDISE_KEY + userId;
+        String merchandiseIdStr = merchandiseId.toString();
         // 如果本来就已经收藏了，那就是删除
         if (lambdaQuery().eq(StarMerchandise::getUserId, userId).eq(StarMerchandise::getMerchandiseId, merchandiseId).count() > 0) {
             // 从zset中删除此商品id
-            stringRedisTemplate.opsForZSet().remove(cacheKey, merchandiseId);
+            stringRedisTemplate.opsForZSet().remove(cacheKey, merchandiseIdStr);
             return lambdaUpdate().eq(StarMerchandise::getUserId, userId).eq(StarMerchandise::getMerchandiseId, merchandiseId).remove();
         } else {
             // key是star:merchandise:userId
             // value是SortedSet，merchandiseId,score为当前时间戳
-            stringRedisTemplate.opsForZSet().add(cacheKey, merchandiseId.toString(), LocalDateTime.now().getNano());
+            stringRedisTemplate.opsForZSet().add(cacheKey, merchandiseIdStr, LocalDateTime.now().getNano());
             return save(new StarMerchandise(
                     userId,
                     merchandiseId,
@@ -64,7 +65,7 @@ public class StarMerchandiseServiceImpl extends ServiceImpl<StarMerchandiseMappe
     @Override
     public PageResult<StarMerchandiseVO> listStarMerchandiseByPage(Long pageNum, Long userId) {
         String cacheKey = STAR_MERCHANDISE_KEY + userId;
-        long start = (long) PAGE_SIZE * pageNum;
+        long start = (long) PAGE_SIZE * (pageNum - 1);
         Set<ZSetOperations.TypedTuple<String>> tuples = stringRedisTemplate.opsForZSet().reverseRangeWithScores(cacheKey, start, start + PAGE_SIZE);
         // 说明缓存中没有
         if (tuples == null || tuples.isEmpty()) {
@@ -86,7 +87,7 @@ public class StarMerchandiseServiceImpl extends ServiceImpl<StarMerchandiseMappe
             Merchandise merchandise = merchandiseClient.getMerchandiseById(merchandiseId);
             StarMerchandiseVO starMerchandiseVO = BeanUtil.copyProperties(merchandise, StarMerchandiseVO.class);
             // 取第一个图片
-            starMerchandiseVO.setPicUri(JSONUtil.toList(starMerchandiseVO.getPicUri(), String.class).get(0));
+            starMerchandiseVO.setPicUris(JSONUtil.toList(starMerchandiseVO.getPicUris(), String.class).get(0));
             merchandiseVOs.add(starMerchandiseVO);
         }
         return PageResult.success(
@@ -100,7 +101,7 @@ public class StarMerchandiseServiceImpl extends ServiceImpl<StarMerchandiseMappe
     public Boolean deleteStarMerchandises(List<Long> merchandiseId, Long userId) {
         String cacheKey = STAR_MERCHANDISE_KEY + userId;
         // 删除redis中的数据
-        stringRedisTemplate.opsForZSet().remove(cacheKey, merchandiseId);
+        stringRedisTemplate.opsForZSet().remove(cacheKey, merchandiseId.stream().map(Object::toString).toArray());
         // 删除数据库中的数据
         return lambdaUpdate()
                 .in(StarMerchandise::getMerchandiseId, merchandiseId)

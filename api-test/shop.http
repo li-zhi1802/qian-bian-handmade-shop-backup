@@ -1,0 +1,50 @@
+### 得到指定商铺的信息
+GET {{gateway_shop_host}}/shop/1
+Authorization: Bearer {{access_token}}
+
+### 增加一个商铺
+POST {{gateway_shop_host}}/shop
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "name": "芝麻商铺",
+  "avatarUri": "/picture/temp.png"
+}
+
+### 更改商铺信息
+PUT {{gateway_shop_host}}/shop-keeper/shop
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "更新商铺信息"
+}
+
+### 新增发货地址
+POST {{gateway_shop_host}}/shop-keeper/shipping-address
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "shopId": 1,
+  "consignorName": "测试",
+  "consignorPhone": "13201920192",
+  "province": "江苏省",
+  "county": "苏州市",
+  "city": "太仓市",
+  "street": "楼东街道"
+}
+
+### 修改默认发货地址
+PUT {{gateway_shop_host}}/shop-keeper/shipping-address/default/1/1625384763044941825/2
+Authorization: Bearer {{access_token}}
+
+### 删除发货地址
+DELETE {{gateway_shop_host}}/shop-keeper/shipping-address/1/1625384677711826946
+Authorization: Bearer {{access_token}}
+
+### 查询发货地址
+GET {{gateway_shop_host}}/shop-keeper/shipping-address/1
+Authorization: Bearer {{access_token}}

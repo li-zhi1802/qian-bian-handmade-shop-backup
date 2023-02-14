@@ -45,10 +45,18 @@ public class ShippingAddressServiceImpl extends ServiceImpl<ShippingAddressMappe
     @Override
     public Boolean addShippingAddress(AddShippingAddressDTO addShippingAddressDTO, Long userId) {
         checkLoginUserWhetherHasQueryShop(userId, addShippingAddressDTO.getShopId());
-        Integer nextPriority = lambdaQuery().select(ShippingAddress::getPriority).eq(ShippingAddress::getShopId, addShippingAddressDTO.getShopId()).orderByDesc(ShippingAddress::getPriority).list().get(0).getPriority() + 1;
         ShippingAddress shippingAddress = BeanUtil.copyProperties(addShippingAddressDTO, ShippingAddress.class);
-        shippingAddress.setPriority(nextPriority);
-        return save(shippingAddress);
+        Integer priority = lambdaQuery().eq(ShippingAddress::getShopId, addShippingAddressDTO.getShopId()).count();
+        shippingAddress.setPriority(priority);
+        boolean success = save(shippingAddress);
+        if (success && priority == 0) {
+            return shopService
+                    .lambdaUpdate()
+                    .eq(Shop::getId, addShippingAddressDTO.getShopId())
+                    .set(Shop::getDefaultAddressId, shippingAddress.getId())
+                    .update();
+        }
+        return success;
     }
 
     @Override
@@ -109,7 +117,7 @@ public class ShippingAddressServiceImpl extends ServiceImpl<ShippingAddressMappe
 
     @Override
     public ShippingAddressVO defaultShippingAddress(Long shopId) {
-        Shop shop = shopService.lambdaQuery().eq(Shop::getId, shopId).select(Shop::getDefaultAddressId).one();
+        Shop shop = shopService.lambdaQuery().eq(Shop::getId, shopId).one();
         if (shop == null) {
             throw new QianBianException("店铺不存在");
         }
