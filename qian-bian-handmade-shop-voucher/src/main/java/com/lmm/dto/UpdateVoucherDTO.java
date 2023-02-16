@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class UpdateVoucherDTO {
     @ApiModelProperty("优惠券编号")
-    private Long voucherId;
+    private Long id;
     @ApiModelProperty("最小金额达到多少可以使用")
     private Integer minMoney;
     @ApiModelProperty("可以减多少")

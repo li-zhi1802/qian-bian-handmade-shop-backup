@@ -72,7 +72,7 @@ public class VoucherServiceImpl extends ServiceImpl<VoucherMapper, Voucher> impl
     @Override
     public Boolean updateVoucher(UpdateVoucherDTO updateVoucherDTO, Long userId) {
         Voucher voucher = lambdaQuery()
-                .eq(Voucher::getId, updateVoucherDTO.getVoucherId())
+                .eq(Voucher::getId, updateVoucherDTO.getId())
                 .select(Voucher::getState, Voucher::getShopId)
                 .one();
         // 检查是否是店主在操作
@@ -82,6 +82,7 @@ public class VoucherServiceImpl extends ServiceImpl<VoucherMapper, Voucher> impl
             throw new QianBianException("只能修改未发布的优惠券信息");
         }
         Voucher update = BeanUtil.copyProperties(updateVoucherDTO, Voucher.class);
+        System.out.println(update);
         update.setUpdatedTime(LocalDateTime.now());
         update.setTitle("满" + update.getMinMoney() + "减" + update.getDecreaseMoney() + "券");
         update.setStock(update.getQuota());
@@ -115,10 +116,14 @@ public class VoucherServiceImpl extends ServiceImpl<VoucherMapper, Voucher> impl
             throw new QianBianException("没有库存了");
         }
         String voucherState = voucher.getState();
-        if (VoucherState.NOT_YET_ISSUED.getCode().equals(voucherState) ||
-                VoucherState.EXPIRED.getCode().equals(voucherState) ||
-                VoucherState.HAS_TAKEN_OFF.getCode().equals(voucherState)) {
-            throw new QianBianException("此券已不能领取");
+        if (VoucherState.NOT_YET_ISSUED.getCode().equals(voucherState)) {
+            throw new QianBianException("此券暂未发放，不能领取");
+        }
+        if (VoucherState.EXPIRED.getCode().equals(voucherState)) {
+            throw new QianBianException("此券暂已过期，不能领取");
+        }
+        if (VoucherState.HAS_TAKEN_OFF.getCode().equals(voucherState)) {
+            throw new QianBianException("此券暂已下架，不能领取");
         }
         int count = userVoucherService.lambdaQuery().eq(UserVoucher::getVoucherId, voucherId).eq(UserVoucher::getUserId, userId).count();
         if (count >= voucher.getLimit()) {

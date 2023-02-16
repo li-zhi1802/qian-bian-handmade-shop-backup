@@ -11,9 +11,10 @@ public class AlipayProperties {
     private String appId;
     private String appPrivateKey;
     private String alipayPublicKey;
-    private String charset = "UTF=8";
-    private String gatewayUrl = "https://openapi.alipaydev.com/gateway.do";
-    private String format = "JSON";
-    private String signType = "RSA2";
+    private String charset;
+    private String gatewayUrl;
+    private String format;
+    private String signType;
     private String notifyUrl;
+    private String returnUrl;
 }

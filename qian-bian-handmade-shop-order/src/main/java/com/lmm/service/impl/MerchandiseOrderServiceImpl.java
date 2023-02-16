@@ -6,6 +6,7 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lmm.client.MerchandiseClient;
@@ -64,15 +65,17 @@ public class MerchandiseOrderServiceImpl extends ServiceImpl<MerchandiseOrderMap
         List<MerchandiseOrder> merchandiseOrders = ordersToBeGenerated.stream().map(go -> {
             MerchandiseOrder merchandiseOrder = BeanUtil.copyProperties(go, MerchandiseOrder.class);
             merchandiseOrder.setUserId(userId);
-            // 修改优惠券的使用数目
-            voucherClient.increaseUsedAmount(go.getVoucherId());
+            if (go.getVoucherId() != null) {
+                // 修改优惠券的使用数目
+                voucherClient.increaseUsedAmount(go.getVoucherId());
+            }
             merchandiseOrder.setMerchandises(JSONUtil.toJsonStr(go.getMerchandises()));
             merchandiseOrder.setState(MerchandiseOrderState.TO_BE_PAID.getCode());
             merchandiseOrder.setCreatedTime(LocalDateTime.now());
             return merchandiseOrder;
         }).collect(Collectors.toList());
         saveBatch(merchandiseOrders, merchandiseOrders.size());
-        String generateOrderId = DateUtil.format(DateUtil.date(), "yyyyMMddHHmmss") + RandomUtil.randomString(6);
+        String generateOrderId = DateUtil.format(DateUtil.date(), "yyyyMMddHHmmss") + RandomUtil.randomString(14);
         String cacheKey = RedisConstant.GENERATE_ORDER_PREFIX + userId;
         List<String> orderIds = merchandiseOrders.stream().map(MerchandiseOrder::getId).collect(Collectors.toList());
         BigDecimal totalAmount = new BigDecimal("0");
@@ -92,7 +95,7 @@ public class MerchandiseOrderServiceImpl extends ServiceImpl<MerchandiseOrderMap
                         .eq(MerchandiseOrder::getUserId, userId)
         );
         List<MerchandiseOrderVO> merchandiseOrderVOs = pageQuery.getRecords().stream().map(p -> {
-            MerchandiseOrderVO merchandiseOrderVO = BeanUtil.copyProperties(p, MerchandiseOrderVO.class);
+            MerchandiseOrderVO merchandiseOrderVO = BeanUtil.copyProperties(p, MerchandiseOrderVO.class, "merchandises");
             merchandiseOrderVO.setShop(BeanUtil.copyProperties(shopClient.getShopById(p.getShopId()), ShopVO.class));
             merchandiseOrderVO.setMerchandises(
                     JSONUtil.toList(p.getMerchandises(), MerchandiseItemDTO.class).stream().map(item -> {
@@ -112,10 +115,14 @@ public class MerchandiseOrderServiceImpl extends ServiceImpl<MerchandiseOrderMap
 
     @Override
     public Boolean updateOrderState(String orderId, String nextState) {
-        return lambdaUpdate()
+        LambdaUpdateChainWrapper<MerchandiseOrder> wrapper = lambdaUpdate()
                 .eq(MerchandiseOrder::getId, orderId)
                 // 直接更新状态
-                .set(MerchandiseOrder::getState, nextState)
-                .update();
+                .set(MerchandiseOrder::getState, nextState);
+        if (MerchandiseOrderState.TO_BE_RECEIVED.getCode().equals(nextState)) {
+            // 支付成功
+            wrapper.set(MerchandiseOrder::getPayTime, LocalDateTime.now());
+        }
+        return wrapper.update();
     }
 }

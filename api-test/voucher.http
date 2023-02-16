@@ -1,0 +1,52 @@
+### 分页返回指定商家的优惠券
+GET {{gateway_voucher_host}}/voucher/1/1
+Authorization: Bearer {{access_token}}
+
+### 登录用户领取指定优惠券
+POST {{gateway_voucher_host}}/voucher/1626115091560730625
+Authorization: Bearer {{access_token}}
+
+### 新增优惠券
+POST {{gateway_voucher_host}}/shop-keeper
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "shopId": 1,
+  "minMoney": 200,
+  "decreaseMoney": 40,
+  "limit": 1,
+  "quota": 100,
+  "startTime": "2023-02-16 00:00:00",
+  "endTime": "2023-02-18 00:00:00",
+  "validUseStartTime": "2023-03-01 00:00:00",
+  "validUseEndTime": "2023-06-01 00:00:00"
+}
+
+### 发放指定优惠券
+PUT {{gateway_voucher_host}}/shop-keeper/1626115091560730625
+Authorization: Bearer {{access_token}}
+
+
+### 修改指定优惠券的信息
+PUT {{gateway_voucher_host}}/shop-keeper
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "id": 1626116638894002178,
+  "minMoney": 200,
+  "decreaseMoney": 20
+}
+
+### /删除优惠券
+DELETE {{gateway_voucher_host}}/shop-keeper/1626117879204167681
+Authorization: Bearer {{access_token}}
+
+### 分页拿到登录用户领取的所有优惠券
+GET {{gateway_voucher_host}}/user-voucher/1
+Authorization: Bearer {{access_token}}
+
+### 删除指定优惠券
+DELETE {{gateway_voucher_host}}/user-voucher/1626115091560730625
+

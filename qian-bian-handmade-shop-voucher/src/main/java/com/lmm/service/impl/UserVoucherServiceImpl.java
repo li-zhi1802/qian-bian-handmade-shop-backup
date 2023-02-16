@@ -47,7 +47,7 @@ public class UserVoucherServiceImpl extends ServiceImpl<UserVoucherMapper, UserV
                 new Page<>(pageNum, USER_VOUCHER_PAGE_SIZE),
                 new LambdaQueryWrapper<UserVoucher>()
                         .eq(UserVoucher::getUserId, userId)
-                        .eq(UserVoucher::getState, filter.getUserVoucherState())
+                        .eq(filter.getUserVoucherState() != null, UserVoucher::getState, filter.getUserVoucherState())
                         // 指定商铺。如果传了的话
                         .eq(filter.getShopId() != null, UserVoucher::getShopId, filter.getShopId())
                         .orderByDesc(UserVoucher::getGetTime)

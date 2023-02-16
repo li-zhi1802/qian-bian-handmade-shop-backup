@@ -6,6 +6,7 @@ import com.lmm.dto.RestResult;
 import com.lmm.service.MerchandiseOrderService;
 import com.lmm.util.SecurityUtil;
 import com.lmm.vo.MerchandiseOrderVO;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import java.util.List;
  * @author 芝麻
  * @since 2023-02-06
  */
+@Api(tags = "商铺订单的接口")
 @RestController
 @RequestMapping("/merchandise-order")
 public class MerchandiseOrderController {

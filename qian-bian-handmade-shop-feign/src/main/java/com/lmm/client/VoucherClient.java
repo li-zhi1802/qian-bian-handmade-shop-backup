@@ -19,5 +19,5 @@ public interface VoucherClient {
     List<Voucher> listShopVouchers(@PathVariable("shopId") Long shopId, @PathVariable("pageNum") Long pageNum);
 
     @PostMapping("/{voucherId}")
-    public Boolean increaseUsedAmount(@PathVariable("voucherId") Long voucherId);
+    Boolean increaseUsedAmount(@PathVariable("voucherId") Long voucherId);
 }

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,8 +25,8 @@ public class AlipayController {
     private AlipayService alipayService;
 
     @ApiOperation("得到支付的body体，前端的地址直接写这个地址就可以跳转支付界面")
-    @GetMapping
-    public String getPayBody(String generateOrderId) throws AlipayApiException {
+    @GetMapping("{generateOrderId}")
+    public String getPayBody(@PathVariable("generateOrderId") String generateOrderId) throws AlipayApiException {
         return alipayService.getPayBody(generateOrderId, SecurityUtil.getUser().getId());
     }
 
@@ -42,14 +41,10 @@ public class AlipayController {
             for (int i = 0; i < values.length; i++) {
                 valueStr = (i == values.length - 1) ? valueStr + values[i] : valueStr + values[i] + ",";
             }
-            // 乱码解决，这段代码在出现乱码时使用
-            valueStr = new String(valueStr.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
             params.put(name, valueStr);
         }
-        System.out.println(params);
         String generateOrderId = params.get("out_trade_no");
-        System.out.println(generateOrderId);
-        alipayService.payNotify(generateOrderId, SecurityUtil.getUser().getId());
+        alipayService.payNotify(generateOrderId, Long.parseLong(params.get("body")));
     }
 
     @ApiOperation("退款")

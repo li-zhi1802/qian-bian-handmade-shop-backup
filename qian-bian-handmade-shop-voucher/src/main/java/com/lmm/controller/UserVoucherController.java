@@ -30,8 +30,8 @@ public class UserVoucherController {
     @GetMapping("/{pageNum}")
     public PageResult<UserVoucherVO> listUserVoucherByPage(
             @PathVariable("pageNum") Long pageNum,
-            @RequestBody UserVoucherFilter filter) {
-        return userVoucherService.listUserVoucherByPage(pageNum, filter, SecurityUtil.getUser().getId());
+            @RequestBody(required = false) UserVoucherFilter filter) {
+        return userVoucherService.listUserVoucherByPage(pageNum, filter == null ? new UserVoucherFilter() : filter, SecurityUtil.getUser().getId());
     }
 
     @ApiOperation("删除指定优惠券")

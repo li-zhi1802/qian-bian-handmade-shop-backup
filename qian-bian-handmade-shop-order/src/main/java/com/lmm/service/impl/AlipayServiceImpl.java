@@ -51,10 +51,13 @@ public class AlipayServiceImpl implements AlipayService {
         String cacheKey = RedisConstant.GENERATE_ORDER_PREFIX + userId;
         GenerateOrder generateOrder = JSONUtil.toBean((String) stringRedisTemplate.opsForHash().get(cacheKey, generateOrderId), GenerateOrder.class);
         // 更新订单状态为支付中
-        generateOrder.getOrderIds().forEach(o -> merchandiseOrderService.lambdaUpdate().eq(MerchandiseOrder::getId, o).set(MerchandiseOrder::getState, MerchandiseOrderState.PAYING).update());
+        generateOrder.getOrderIds().forEach(o -> merchandiseOrderService.lambdaUpdate().eq(MerchandiseOrder::getId, o).set(MerchandiseOrder::getState, MerchandiseOrderState.PAYING.getCode()).update());
         // 设置notifyUrl
         alipayRequest.setNotifyUrl(alipayProperties.getNotifyUrl());
+        alipayRequest.setReturnUrl(alipayProperties.getReturnUrl());
         JSONObject bizContent = new JSONObject();
+        bizContent.put("subject", "订单号：" + generateOrderId);
+        bizContent.put("body", userId);
         bizContent.put("out_trade_no", generateOrderId);
         bizContent.put("total_amount", generateOrder.getTotalAmount());
         bizContent.put("product_code", "FAST_INSTANT_TRADE_PAY");
@@ -95,7 +98,7 @@ public class AlipayServiceImpl implements AlipayService {
         String cacheKey = RedisConstant.GENERATE_ORDER_PREFIX + userId;
         GenerateOrder generateOrder = JSONUtil.toBean((String) stringRedisTemplate.opsForHash().get(cacheKey, generateOrderId), GenerateOrder.class);
         // 删除大订单
-        stringRedisTemplate.opsForHash().delete(cacheKey, generateOrder);
+        stringRedisTemplate.opsForHash().delete(cacheKey, generateOrderId);
         // 修改状态
         generateOrder.getOrderIds().forEach(o -> {
             // 支付成功===待发货
